@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class InitScene : MonoBehaviour
 {
-    float fadeSpeed = 0.3f;        //透明度が変わるスピードを管理
+    float fadeSpeed = 0.5f;        //透明度が変わるスピードを管理
     float red, green, blue, alpa;   //パネルの色、不透明度を管理
     bool isFadeIn = true;   //フェードイン処理の開始、完了を管理するフラグ
     Image fadeImage;                //透明度を変更するパネルのイメージ
