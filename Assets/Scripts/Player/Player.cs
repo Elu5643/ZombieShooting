@@ -30,11 +30,6 @@ public class Player : MonoBehaviour
     }
 
     int currentHitPoint;      //åªç›ÇÃPlayerÇÃHitPoint
-    public int CurrentHitPoint
-    {
-        get { return currentHitPoint; }
-        set { currentHitPoint = value; }
-    }
 
     const int maxHitPoint = 100;  //ç≈ëÂHitPoint
 
@@ -55,12 +50,6 @@ public class Player : MonoBehaviour
     {
         get { return isStop; }
         set { isStop = value; }
-    }
-
-    enum State
-    {
-        Walk,   //ï‡Ç≠
-        Aim,    //è∆èÄ
     }
 
     void Start()
@@ -156,12 +145,10 @@ public class Player : MonoBehaviour
     {
         if (Input.GetMouseButton(1) && !Cursor.visible)
         {
-            anim.SetInteger("State", (int)State.Aim);
             return true;
         }
         else
         {
-            anim.SetInteger("State", (int)State.Walk);
             return false;
         }
     }
