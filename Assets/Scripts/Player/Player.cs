@@ -176,21 +176,19 @@ public class Player : MonoBehaviour
             {
                 hitPos = hit.point;
             }
-            //Debug.Log(hit.point);
-            //string name = hit.collider.gameObject.name; // 衝突した相手オブジェクトの名前を取得
-            //Debug.Log(name);
-            Debug.DrawRay(ray.origin, ray.direction * rayLength, Color.red, 5);
         }
     }
 
     void CursorController()
     {
-        if (Input.GetKeyDown(KeyCode.Tab) && !Cursor.visible)
+        if (Input.GetKeyDown(KeyCode.Tab) && !Cursor.visible || 
+            Input.GetKeyDown(KeyCode.Escape) && !Cursor.visible)
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
         }
-        else if (Input.GetKeyDown(KeyCode.Tab) && Cursor.visible)
+        else if (Input.GetKeyDown(KeyCode.Tab) && Cursor.visible ||
+                 Input.GetKeyDown(KeyCode.Escape) && Cursor.visible)
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
