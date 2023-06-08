@@ -17,10 +17,6 @@ public class GameController : MonoBehaviour
 
     [SerializeField] Player player;
 
-    float fadeSpeed = 0.3f;        //透明度が変わるスピードを管理
-    float red, green, blue, alfa;   //パネルの色、不透明度を管理
-    [SerializeField] Image fadeImage;                //透明度を変更するパネルのイメージ
-
     public enum GamePart
     {
         Init,         //イントロ
@@ -60,23 +56,12 @@ public class GameController : MonoBehaviour
 
     void StartFadeIn()
     {
-        fadeImage.enabled = true;
-        alfa -= fadeSpeed * Time.deltaTime;
-        fadeImage.color = new Color(red, green, blue, alfa);
-        if (alfa <= 0)
-        { 
-            fadeImage.enabled = false;
+        FadeManager.Instance.FadeOut();
+        if (FadeManager.Instance.IsFadeOut == false)
+        {
             currentPart = GamePart.Main;
             player.IsStop = false;
         }
-    }
-
-    void Start()
-    {
-        red = fadeImage.color.r;
-        green = fadeImage.color.g;
-        blue = fadeImage.color.b;
-        alfa = fadeImage.color.a;
     }
 
     // Update is called once per frame
@@ -121,7 +106,7 @@ public class GameController : MonoBehaviour
         const float finish_time = 5.0f;
         if (timer >= finish_time)
         {
-            SceneManager.LoadScene("Start");
+            SceneManager.LoadScene("Menu");
         }
     }
 
@@ -131,7 +116,7 @@ public class GameController : MonoBehaviour
         const float finish_time = 5.0f;
         if (timer >= finish_time)
         {
-            SceneManager.LoadScene("Start");
+            SceneManager.LoadScene("Menu");
         }
     }
 }
