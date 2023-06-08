@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class ItemBox : MonoBehaviour
 {
     [SerializeField] GameObject itemPrefab = null;
-    //[SerializeField] BulletController bulletController = null;
 
     GameObject obj = null;
     Item item = null;
@@ -15,6 +14,8 @@ public class ItemBox : MonoBehaviour
     {
         get { return item; }
     }
+
+    int activeCount = 0;        //アクティブにするか非アクティブ
 
     // Start is called before the first frame update
     void Start()
@@ -35,25 +36,27 @@ public class ItemBox : MonoBehaviour
             obj.GetComponent<Item>().Init(gameObject, new_position, (ItemData.ID)i);
         }
 
-        item = GetComponentInChildren<Item>();
-
+        item = GetComponentInChildren<Item>();  //下のコードでも可
         //item = obj.GetComponent<Item>();
+
+        obj.SetActive(false);
     }
-
-
-
 
 
     void Update()
     {
-        if (!Cursor.visible)
+        if(Input.GetKeyDown(KeyCode.Tab))
         {
-            obj.SetActive(false);
+            activeCount++;
+            if(activeCount == 1)
+            {
+                obj.SetActive(true);
+            }
+            if(activeCount == 2)
+            {
+                obj.SetActive(false);
+                activeCount = 0;
+            }
         }
-        else if (Cursor.visible)
-        {
-            obj.SetActive(true);
-        }
-        
     }
 }

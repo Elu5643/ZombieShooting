@@ -38,10 +38,6 @@ public class Bullet : MonoBehaviour
         rb.velocity = new Vector3(0, 0, 0);
         rb.angularVelocity = new Vector3(0, 0, 0);
 
-        //direction = hitPos - transform.position;
-        //rb.AddForce(direction.normalized * shotSpeed, ForceMode.Acceleration);
-
-
         if (isAim)
         {
             if(isMove)
