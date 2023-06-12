@@ -8,13 +8,11 @@ public class Generator : MonoBehaviour
 
     [SerializeField] GameObject objPrefab = null;
     [SerializeField] int firstPoolNum = 0;    //最初に生成する数
-    //C#の動的配列
     public List<GameObject> objects;
 
 
     void Start()
     {
-        //List<GameObject>(配列用サイズ)
         objects = new List<GameObject>(firstPoolNum);
 
         for (int i = 0; i < firstPoolNum; i++)

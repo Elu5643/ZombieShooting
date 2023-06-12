@@ -7,10 +7,10 @@ using UnityEngine.SceneManagement;
 public class ControllerButton : MonoBehaviour
 {
 
-    [SerializeField] AudioClip cheakSe = null;
+    [SerializeField] AudioClip checkSe = null;
     [SerializeField] Text colorText = null;
 
-    AudioSource audioSource;
+    AudioSource audioSource = null;
 
     // Start is called before the first frame update
     void Start()
@@ -20,12 +20,12 @@ public class ControllerButton : MonoBehaviour
 
     public void OnClickControllerButton()
     {
-        StartCoroutine("ClickController");
+        StartCoroutine(ClickButton());
     }
 
-    IEnumerator ClickController()
+    IEnumerator ClickButton()
     {
-        audioSource.PlayOneShot(cheakSe);
+        audioSource.PlayOneShot(checkSe);
         colorText.color = new Color(0.2f, 0.8f, 0.1f, 1.0f);
         while (true)
         {

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class EndButton : MonoBehaviour
 {
-    Canvas myCanvas;
-    int activeCount = 0;    //アクティブにするか非アクティブ
+    Canvas myCanvas = null;
+    int activeCount = 1;    //アクティブにするか非アクティブ
 
     // Start is called before the first frame update
     void Start()
@@ -21,19 +21,18 @@ public class EndButton : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             activeCount++;
-            if (activeCount == 1)
+            if (activeCount % 2 == 0)
             {
                 myCanvas.enabled = true;
             }
-            if (activeCount == 2)
+            else if (activeCount % 2 == 1)
             {
                 myCanvas.enabled = false;
-                activeCount = 0;
             }
         }
     }
 
-    public void YesButton()
+    public void ClickedButton()
     {
         Application.Quit();
     }
@@ -41,6 +40,8 @@ public class EndButton : MonoBehaviour
     public void NoButton()
     {
         myCanvas.enabled = false;
-        activeCount = 0;
+        activeCount = 1;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }

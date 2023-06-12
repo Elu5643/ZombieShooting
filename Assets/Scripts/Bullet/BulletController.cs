@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using UnityEngine.UI;
 using TMPro;
 
 public class BulletController : MonoBehaviour
@@ -9,13 +8,11 @@ public class BulletController : MonoBehaviour
     [SerializeField] TextMeshProUGUI numText = null;
     [SerializeField] ItemBox itemBox = null;
 
-
     const int maxNum = 30;  //ãŒÀ’e‚Ì”
 
     int mainNum = maxNum;   //Œ»Ýe‚É“ü‚Á‚Ä‚¢‚é’e
     int subNum = maxNum;    //ƒTƒu‚Å’e‚ðŽ‚Á‚Ä‚¢‚é’e
 
-    int num = maxNum;       //‹…”‚ðŒ¸‚ç‚·ˆ×
 
     public int MainNum
     {
@@ -36,7 +33,7 @@ public class BulletController : MonoBehaviour
     public void AddBullet()
     {
         subNum += 10;
-        itemBox.Item.Num(subNum, ItemData.ID.Item01);
+        itemBox.Item.SetNum(subNum, ItemData.ID.Item01);
     }
 
     public void ShotBullet()
@@ -47,7 +44,9 @@ public class BulletController : MonoBehaviour
 
     public void ReloadBullet()
     {
-        if(subNum >= maxNum)
+        int num = maxNum;       //‹…”‚ðŒ¸‚ç‚·ˆ×‚Ì’²®•Ï”
+
+        if (subNum >= maxNum)
         {
             num -= mainNum;
             subNum -= num;
@@ -73,6 +72,6 @@ public class BulletController : MonoBehaviour
         }
 
         numText.text = mainNum.ToString();
-        itemBox.Item.Num(subNum, ItemData.ID.Item01);
+        itemBox.Item.SetNum(subNum, ItemData.ID.Item01);
     }
 }

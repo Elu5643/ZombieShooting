@@ -9,8 +9,8 @@ using UnityEngine.UI;
 */
 public class Item : MonoBehaviour
 {
-    [SerializeField] Image itemImage;
-    [SerializeField] Text numText;
+    [SerializeField] Image itemImage = null;
+    [SerializeField] Text numText = null;
 
 
     public void Init(GameObject parent, Vector3 pos, ItemData.ID item_id)
@@ -28,7 +28,7 @@ public class Item : MonoBehaviour
         numText.text = item_num.Num.ToString();
     }
 
-    public void Num(int num, ItemData.ID item_id)
+    public void SetNum(int num, ItemData.ID item_id)
     {
         switch(item_id)
         {

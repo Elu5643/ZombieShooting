@@ -6,7 +6,7 @@ using UnityEngine;
 public class ItemDB : ScriptableObject
 {
 	[SerializeField]
-	List<ItemData> list;
+	List<ItemData> list = null;
 
 	public ItemData GetItem(ItemData.ID id)
 	{

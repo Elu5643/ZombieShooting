@@ -9,11 +9,11 @@ public class FadeManager : SingletonMonoBehaviour<FadeManager>
 {
     protected override bool dontDestroyOnLoad { get { return true; } }
 
+    [SerializeField] Image fadeImage = null;   //透明度を変更するパネルのイメージ
     float fadeSpeed = 0.5f;             //透明度が変わるスピードを管理
     float red, green, blue, alpa;       //パネルの色、不透明度を管理
-    [SerializeField] Image fadeImage;   //透明度を変更するパネルのイメージ
 
-    bool isFadeIn = false;      //FadeInになったかを判定
+    bool isFadeIn = true;      //FadeInになったかを判定
     public bool IsFadeIn
     {
         get { return isFadeIn; }
@@ -34,7 +34,7 @@ public class FadeManager : SingletonMonoBehaviour<FadeManager>
 
     void Update()
     {
-        if (!isFadeIn)
+        if (isFadeIn)
         {
             FadeIn();
         }
@@ -42,32 +42,46 @@ public class FadeManager : SingletonMonoBehaviour<FadeManager>
 
     public void FadeIn()
     {
-        fadeImage.enabled = true;
-        isFadeOut = true;
-        alpa -= fadeSpeed * Time.deltaTime;
-        SetAlpha();
-        if (alpa <= 0)
-        {
-            isFadeIn = true;
-            fadeImage.enabled = false;
-        }
+        StartCoroutine(FadeInColor());
     }
 
     public void FadeOut()
     {
-        fadeImage.enabled = true;
-        alpa += fadeSpeed * Time.deltaTime;
-        SetAlpha();
-        if (alpa >= 1)
-        {
-            isFadeOut = false;
-            isFadeIn = false;
-        }
+        StartCoroutine(FadeOutColor());
     }
 
-    void SetAlpha()
+    void InitColor()
     {
         fadeImage.color = new Color(red, green, blue, alpa);
+    }
+
+
+    IEnumerator FadeInColor()
+    {
+        fadeImage.enabled = true;
+        alpa -= fadeSpeed * Time.deltaTime;
+        InitColor();
+        if (alpa <= 0)
+        {
+            isFadeOut = true;
+            isFadeIn = false;
+
+            fadeImage.enabled = false;
+        }
+        yield return null;
+    }
+
+    IEnumerator FadeOutColor()
+    {
+        fadeImage.enabled = true;
+        alpa += fadeSpeed * Time.deltaTime;
+        InitColor();
+        if (alpa >= 1)
+        {
+            isFadeIn = true;
+            isFadeOut = false;
+        }
+        yield return null;
     }
 }
 

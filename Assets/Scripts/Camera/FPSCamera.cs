@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FPSCamera : MonoBehaviour
 {
-    [SerializeField] Player player;
+    [SerializeField] Player player = null;
 
     [Range(0.1f, 10f)]
     //カメラ感度、数値が大きいほどより直感的な操作が可能.

@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    Animator anim;
+    Animator anim = null;
 
     [SerializeField] Player player = null;
-    //[SerializeField] Shooter shooter = null;
-    [SerializeField] BulletController bulletController = null;
+    [SerializeField] Shooter shooter = null;
 
     enum State
     {
@@ -25,42 +24,45 @@ public class Gun : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.W))
+        // 銃が動くアニメーション
+        if (Input.GetKey(KeyCode.W) && anim.GetCurrentAnimatorStateInfo(0).IsName("Reload") == false)
         {
             anim.SetInteger("State", (int)State.Walk);
+            //  歩きうちの為
             if (Input.GetKey(KeyCode.Mouse0) && !Cursor.visible)
             {
                 anim.SetInteger("State", (int)State.Stay);
             }
         }
+        // 動きが止まった際
         else
         {
             anim.SetInteger("State", (int)State.Stay);
         }
 
-        if (player.IsAim())
+        // エイムアニメーション
+        if (player.IsAim() && anim.GetCurrentAnimatorStateInfo(0).IsName("Reload") == false)
         {
             anim.SetInteger("State", (int)State.Aim);
         }
 
 
-        if (bulletController.MainNum < 30 && bulletController.SubNum > 0 &&
-           Input.GetKeyDown(KeyCode.R) && !Cursor.visible)
+        // リロードアニメーション
+        if (shooter.Reload())
         {
             anim.SetInteger("State", (int)State.Reload);
-            bulletController.ReloadBullet();
         }
     }
 
-    public bool IsReload()
+    public bool IsNotShot()
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Reload") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
         {
-            return false;
+            return true;
         }
         else
         {
-            return true;
+            return false;
         }
     }
 }

@@ -36,8 +36,8 @@ public class ItemData
 	[SerializeField]
 	EffectType effect;  // Œø‰Ê
 
-	[SerializeField]	// ŒÂ”
-	int num;
+	[SerializeField]
+	int num;			//	ŒÂ”
 
 	public ID Id
 	{

@@ -6,10 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class StartButton : MonoBehaviour
 {
-    [SerializeField] AudioClip cheakSe = null;
+    [SerializeField] AudioClip checkSe = null;
     [SerializeField] Text colorText = null;
 
-    AudioSource audioSource;
+    AudioSource audioSource = null;
 
     // Start is called before the first frame update
     void Start()
@@ -19,12 +19,12 @@ public class StartButton : MonoBehaviour
 
     public void OnClickStartButton()
     {
-        StartCoroutine("ClickStart");
+        StartCoroutine(ClickStart());
     }
 
     IEnumerator ClickStart()
     {
-        audioSource.PlayOneShot(cheakSe);
+        audioSource.PlayOneShot(checkSe);
         colorText.color = new Color(0.2f, 0.8f, 0.1f, 1.0f);
         while (true)
         {

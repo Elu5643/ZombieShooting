@@ -12,9 +12,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] AudioClip walkSe = null;
     [SerializeField] AudioClip destroySe = null;
 
-    NavMeshAgent nav;
-    Animator anim;
-    AudioSource audioSource;
+    NavMeshAgent nav = null;
+    Animator anim = null;
+    AudioSource audioSource = null;
 
     RaycastHit hit;
 
@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour
 
     float randomPos = 10;   //ˆÚ“®‚·‚é“®‚«‚ğƒ‰ƒ“ƒ_ƒ€‚É‚·‚é
 
-    bool isMove = false;    //Enemy‚Ì“®‚«‚ğ~‚ß‚éiUŒ‚‚ğ‹ò‚ç‚Á‚½j
+    bool isMoving = true;    //Enemy‚Ì“®‚«‚ğ~‚ß‚éiUŒ‚‚ğ‹ò‚ç‚Á‚½j
 
     public enum State
     {
@@ -57,7 +57,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isMove)
+        if (isMoving)
         {
             switch (currentState)
             {
@@ -89,7 +89,7 @@ public class Enemy : MonoBehaviour
     {
         anim.SetTrigger("Damage");
         nav.SetDestination(transform.position);
-        isMove = true;
+        isMoving = false;
     }
 
     void Destroy()
@@ -99,14 +99,14 @@ public class Enemy : MonoBehaviour
         nav.SetDestination(transform.position);
         audioSource.PlayOneShot(destroySe);
         Instantiate(BulletObj, transform.position, Quaternion.identity);
-        isMove = true;
+        isMoving = false;
     }
 
     public void Damage(int damage)
     {
         if (hitPoint <= 1)
         { 
-            if (!isMove)
+            if (isMoving)
             {
                 Destroy();
             }
@@ -120,9 +120,9 @@ public class Enemy : MonoBehaviour
 
     bool IsFound()
     {
-        var playerDirection = target.transform.position - transform.position;
-        var angle = Vector3.Angle(transform.forward, playerDirection);
-        var direction = playerDirection.normalized;
+        Vector3 playerDirection = target.transform.position - transform.position;
+        float angle = Vector3.Angle(transform.forward, playerDirection);
+        Vector3 direction = playerDirection.normalized;
 
         if (angle < 100)
         {
@@ -131,10 +131,6 @@ public class Enemy : MonoBehaviour
                 if (hit.transform.gameObject == target)
                 {
                     return true;
-                }
-                else
-                {
-                    return false;
                 }
             }
         }
@@ -192,8 +188,6 @@ public class Enemy : MonoBehaviour
             anim.SetInteger("State", (int)AnimState.Wait);
         }
 
-        //Debug.DrawRay(enemyPos.transform.position, direction, Color.red);
-
         if (Vector3.Distance(transform.position, target.transform.position) <= 1.1f)
         {
             nav.SetDestination(transform.position);
@@ -220,7 +214,7 @@ public class Enemy : MonoBehaviour
     }
     void MoveEvent()
     {
-        isMove = false;
+        isMoving = true;
         currentState = State.Cahse;
         anim.SetInteger("State", (int)AnimState.Cahse);
     }

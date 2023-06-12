@@ -27,7 +27,7 @@ public class DBManager : MonoBehaviour
 
 
     [SerializeField]
-    ItemDB itemDB;
+    ItemDB itemDB = null;
 
 
     void Awake()
@@ -38,17 +38,5 @@ public class DBManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

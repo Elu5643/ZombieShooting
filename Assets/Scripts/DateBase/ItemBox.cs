@@ -15,7 +15,7 @@ public class ItemBox : MonoBehaviour
         get { return item; }
     }
 
-    int activeCount = 0;        //アクティブにするか非アクティブ
+    int activeCount = 1;        //アクティブにするか非アクティブ
 
     // Start is called before the first frame update
     void Start()
@@ -48,14 +48,13 @@ public class ItemBox : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Tab))
         {
             activeCount++;
-            if(activeCount == 1)
+            if(activeCount % 2 == 0)
             {
                 obj.SetActive(true);
             }
-            if(activeCount == 2)
+            else if(activeCount % 2 == 1)
             {
                 obj.SetActive(false);
-                activeCount = 0;
             }
         }
     }

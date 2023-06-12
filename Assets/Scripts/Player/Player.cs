@@ -5,21 +5,21 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] Slider hp;
-    [SerializeField] Image image;
+    [SerializeField] Slider hp = null;
+    [SerializeField] Image image = null;
 
     [SerializeField] AudioClip walkSe = null;
     [SerializeField] AudioClip addBulletSe = null;
 
-    [SerializeField] Camera mainCamera;
-    [SerializeField] FPSCamera fpsCamera;
-    [SerializeField] ShakeCamera shake;
-    [SerializeField] CurveControlledBob bob;
+    [SerializeField] Camera mainCamera = null;
+    [SerializeField] FPSCamera fpsCamera = null;
+    [SerializeField] ShakeCamera shake = null;
+    [SerializeField] CurveControlledBob bob = null;
 
 
-    Animator anim;
-    Rigidbody rb;
-    AudioSource audioSource;
+    Animator anim = null;
+    Rigidbody rb = null;
+    AudioSource audioSource = null;
 
 
     Vector3 hitPos;     //レイの当たった位置を取得
@@ -44,7 +44,7 @@ public class Player : MonoBehaviour
 
     bool isStop = true;     //Playerの動きを制限（攻撃を喰らった時）
 
-    bool isJump = false;    //ジャンプボタンを押したか
+    bool canJump = false;    //ジャンプボタンを押したか
 
     public bool IsStop
     {
@@ -69,7 +69,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (IsMove())
+        if (IsMove() == false)
         {
             audioSource.Stop();
         }
@@ -89,7 +89,7 @@ public class Player : MonoBehaviour
             IsAim();
 
             Jump();
-            RayShooter();
+            RayCasting();
             CursorController();
 
             Vector3 vecBob = bob.DoHeadBob(0.8f, IsMove());
@@ -124,20 +124,14 @@ public class Player : MonoBehaviour
         {
             rb.velocity = moveForward * moveSpeed + new Vector3(0, rb.velocity.y, 0);
         }
-
-        //// キャラクターの向きを進行方向に
-        //if (moveForward != Vector3.zero)
-        //{
-        //    transform.rotation = Quaternion.LookRotation(moveForward);
-        //}
     }
 
     void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isJump)
+        if (Input.GetKeyDown(KeyCode.Space) && canJump)
         {
             rb.AddForce(transform.up * jumpPower, ForceMode.Impulse);
-            isJump = false;
+            canJump = false;
         }
     }
 
@@ -157,15 +151,15 @@ public class Player : MonoBehaviour
     {
         if (rb.velocity.z == 0 || rb.velocity.x == 0)
         {
-            return true;
+            return false;
         }
         else
         {
-            return false;
+            return true;
         }
     }
 
-    void RayShooter()
+    void RayCasting()
     {
         if (!Cursor.visible)
         {
@@ -202,9 +196,9 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "EnemyAttack" && currentHitPoint >= 1)
+        if (other.gameObject.tag == "EnemyAttack")
         {
-            currentHitPoint -= 10;
+            currentHitPoint -= 100;
             hp.value = currentHitPoint;
 
             if (currentHitPoint >= 1)
@@ -212,17 +206,17 @@ public class Player : MonoBehaviour
                 image.color = new Color(0.5f, 0f, 0f, 0.5f);
                 isStop = true;
                 anim.SetTrigger("Damage");
-                shake.Shake(0.25f, 0.1f);
+                shake.BeginShake(0.25f, 0.1f);
             }
             else
             {
                 image.color = new Color(0.5f, 0f, 0f, 0.5f);
                 isStop = true;
                 anim.SetTrigger("Destroy");
-                shake.Shake(0.25f, 0.1f);
+                shake.BeginShake(0.25f, 0.1f);
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
-                GameObject.Find("GameController")?.GetComponent<GameController>()?.FailedGame();
+                GameObject.Find("GameController")?.GetComponent<GameController>()?.FailureGame();
             }
         }
 
@@ -244,7 +238,7 @@ public class Player : MonoBehaviour
     {
         if(other.gameObject.tag == "Ground")
         {
-            isJump = true;
+            canJump = true;
         }
     }
 }

@@ -6,10 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class BackMenuButton : MonoBehaviour
 {
-    [SerializeField] AudioClip cheakSe = null;
+    [SerializeField] AudioClip checkSe = null;
     [SerializeField] Text colorText = null;
 
-    AudioSource audioSource;
+    AudioSource audioSource = null;
 
 
     void Start()
@@ -19,12 +19,12 @@ public class BackMenuButton : MonoBehaviour
 
     public void OnClickBackMenuButton()
     {
-        StartCoroutine("ClickBackMenu");
+        StartCoroutine(BackMenuClick());
     }
 
-    IEnumerator ClickBackMenu()
+    IEnumerator BackMenuClick()
     {
-        audioSource.PlayOneShot(cheakSe);
+        audioSource.PlayOneShot(checkSe);
         colorText.color = new Color(0.2f, 0.8f, 0.1f, 1.0f);
         while (true)
         {

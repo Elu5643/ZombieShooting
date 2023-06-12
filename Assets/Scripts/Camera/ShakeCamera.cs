@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ShakeCamera : MonoBehaviour
 {
-    public void Shake(float duration, float magnitude)
+    public void BeginShake(float duration, float magnitude)
     {
-        StartCoroutine(TheShake(duration, magnitude));
+        StartCoroutine(Shake(duration, magnitude));
     }
 
-    private IEnumerator TheShake(float duration, float magnitude)
+    private IEnumerator Shake(float duration, float magnitude)
     {
         Vector3 pos = transform.localPosition;
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CurveControlledBob : MonoBehaviour
 {
-    [SerializeField] Player player;
+    [SerializeField] Player player = null;
 
     [SerializeField] float horizontalBobRange = 0.05f;
     [SerializeField] float verticalBobRange = 0.05f;
@@ -25,25 +25,25 @@ public class CurveControlledBob : MonoBehaviour
 
     [SerializeField] float VerticaltoHorizontalRatio = 2f;
 
-    float m_CyclePositionX;
-    float m_CyclePositionY;
-    float m_BobBaseInterval;
-    Vector3 m_OriginalCameraPosition;
-    float m_Time;
+    float cyclePositionX;
+    float cyclePositionY;
+    float bobBaseInterval;
+    Vector3 originalCameraPosition;
+    float time;
 
 
     public void Setup(Camera camera, float bobBaseInterval)
     {
-        m_BobBaseInterval = bobBaseInterval;
-        m_OriginalCameraPosition = camera.transform.localPosition;
+        this.bobBaseInterval = bobBaseInterval;
+        originalCameraPosition = camera.transform.localPosition;
 
-        m_Time = Bobcurve[Bobcurve.length - 1].time;
+        time = Bobcurve[Bobcurve.length - 1].time;
     }
 
 
     public Vector3 DoHeadBob(float speed, bool isWalk)
     {
-        if (!isWalk)
+        if (isWalk)
         {
             if (horizontalBobRange < walkHorizontalBobRange)
             {
@@ -66,19 +66,19 @@ public class CurveControlledBob : MonoBehaviour
             }
         }
 
-        float xPos = m_OriginalCameraPosition.x + (Bobcurve.Evaluate(m_CyclePositionX) * this.horizontalBobRange);
-        float yPos = m_OriginalCameraPosition.y + (Bobcurve.Evaluate(m_CyclePositionY) * this.verticalBobRange);
+        float xPos = originalCameraPosition.x + (Bobcurve.Evaluate(cyclePositionX) * horizontalBobRange);
+        float yPos = originalCameraPosition.y + (Bobcurve.Evaluate(cyclePositionY) * verticalBobRange);
 
-        m_CyclePositionX += (speed * Time.deltaTime) / m_BobBaseInterval;
-        m_CyclePositionY += ((speed * Time.deltaTime) / m_BobBaseInterval) * VerticaltoHorizontalRatio;
+        cyclePositionX += (speed * Time.deltaTime) / bobBaseInterval;
+        cyclePositionY += ((speed * Time.deltaTime) / bobBaseInterval) * VerticaltoHorizontalRatio;
 
-        if (m_CyclePositionX > m_Time)
+        if (cyclePositionX > time)
         {
-            m_CyclePositionX = m_CyclePositionX - m_Time;
+            cyclePositionX = cyclePositionX - time;
         }
-        if (m_CyclePositionY > m_Time)
+        if (cyclePositionY > time)
         {
-            m_CyclePositionY = m_CyclePositionY - m_Time;
+            cyclePositionY = cyclePositionY - time;
         }
 
         return new Vector3(xPos, yPos, 0f);

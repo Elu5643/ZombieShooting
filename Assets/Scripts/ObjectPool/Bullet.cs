@@ -9,11 +9,11 @@ public class Bullet : MonoBehaviour
 
     GameObject generator = null;
 
-    Rigidbody rb;
+    Rigidbody rb = null;
 
     float timer = 0.0f;     //オブジェクトが消える時間を計る
 
-    float shotSpeed = 2500f;    //弾を飛ばすスピード
+    float shotSpeed = 2000f;    //弾を飛ばすスピード
 
     Vector3 direction;
 
@@ -40,76 +40,11 @@ public class Bullet : MonoBehaviour
 
         if (isAim)
         {
-            if(isMove)
-            {
-                direction = hitPos - transform.position;
-                rb.AddForce(direction.normalized * shotSpeed, ForceMode.Acceleration);
-            }
-            else
-            {
-                Vector3 dir;
-
-                // 縦のばらつき
-                float v = Random.Range(-dispersion * verticalToHorizontalRatio - angle, dispersion * verticalToHorizontalRatio + angle);
-                if (v >= 0)
-                {
-                    dir = Vector3.Slerp(forward, playerPos.up, v);
-                }
-                else
-                {
-                    dir = Vector3.Slerp(forward, -playerPos.up, -v);
-                }
-
-                // 横のばらつき
-                float h = Random.Range(-dispersion, dispersion);
-                if (h >= 0)
-                {
-                    dir = Vector3.Slerp(dir, playerPos.right, h);
-                }
-                else
-                {
-                    dir = Vector3.Slerp(dir, -playerPos.right, -h);
-                }
-
-                rb.AddForce(dir.normalized * shotSpeed, ForceMode.Acceleration);
-            }
-
+            BulletDisparity(forward, isMove, playerPos, hitPos);    //弾のばらけ具合
         }
         else
         {
-            if (isMove)
-            {
-                direction = hitPos - transform.position;
-                rb.AddForce(direction.normalized * shotSpeed, ForceMode.Acceleration);
-            }
-            else
-            {
-                Vector3 dir;
-
-                // 縦のばらつき
-                float v = Random.Range(-dispersion * verticalToHorizontalRatio - angle, dispersion * verticalToHorizontalRatio + angle);
-                if (v >= 0)
-                {
-                    dir = Vector3.Slerp(forward, playerPos.up, v);
-                }
-                else
-                {
-                    dir = Vector3.Slerp(forward, -playerPos.up, -v);
-                }
-
-                // 横のばらつき
-                float h = Random.Range(-dispersion, dispersion);
-                if (h >= 0)
-                {
-                    dir = Vector3.Slerp(dir, playerPos.right, h);
-                }
-                else
-                {
-                    dir = Vector3.Slerp(dir, -playerPos.right, -h);
-                }
-
-                rb.AddForce(dir.normalized * shotSpeed, ForceMode.Acceleration);
-            }
+            BulletDisparity(forward, isMove, playerPos, hitPos);    //弾のばらけ具合
         }
     }
 
@@ -126,7 +61,62 @@ public class Bullet : MonoBehaviour
         }
     }
 
+    void BulletDisparity(Vector3 forward, bool isMove, Transform playerPos, Vector3 hitPos)
+    {
+        if (isMove == false)
+        {
+            direction = hitPos - transform.position;
+            rb.AddForce(direction.normalized * shotSpeed, ForceMode.Acceleration);
+        }
+        else
+        {
+            Vector3 dir;
+
+            // 縦のばらつき
+            float v = Random.Range(-dispersion * verticalToHorizontalRatio - angle, dispersion * verticalToHorizontalRatio + angle);
+            if (v >= 0)
+            {
+                dir = Vector3.Slerp(forward, playerPos.up, v);
+            }
+            else
+            {
+                dir = Vector3.Slerp(forward, -playerPos.up, -v);
+            }
+
+            // 横のばらつき
+            float h = Random.Range(-dispersion, dispersion);
+            if (h >= 0)
+            {
+                dir = Vector3.Slerp(dir, playerPos.right, h);
+            }
+            else
+            {
+                dir = Vector3.Slerp(dir, -playerPos.right, -h);
+            }
+
+            rb.AddForce(dir.normalized * shotSpeed, ForceMode.Acceleration);
+        }
+    }
+
     void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Enemy")
+        {
+            GetComponent<Maneged>().ExecuteEvent(gameObject);
+        }
+    }
+
+    // Rigidbodyの設定でContinuous Dynamicにしているけどすり抜けた際の保険
+    void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Enemy")
+        {
+            GetComponent<Maneged>().ExecuteEvent(gameObject);
+        }
+    }
+
+    // Rigidbodyの設定でContinuous Dynamicにしているけどすり抜けた際の保険
+    void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Enemy")
         {
