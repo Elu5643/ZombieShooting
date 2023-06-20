@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
     {
         Wait,   //@~‚Ü‚é
         Saerch, //@õ“G
-        Cahse,  //@Œ©‚Â‚¯‚½
+        Chase,  //@Œ©‚Â‚¯‚½
         Freeze, //@’â~
     }
 
@@ -39,7 +39,7 @@ public class Enemy : MonoBehaviour
     {
         Wait,   //@~‚Ü‚é
         Saerch, //@õ“G
-        Cahse,  //@Œ©‚Â‚¯‚½
+        Chase,  //@Œ©‚Â‚¯‚½
         Attack, //@UŒ‚
         Freeze, //@’â~
     }
@@ -69,7 +69,7 @@ public class Enemy : MonoBehaviour
                     Saerch();
                     break;
 
-                case State.Cahse:
+                case State.Chase:
                     Chase();
                     break;
 
@@ -163,8 +163,8 @@ public class Enemy : MonoBehaviour
         else if (IsFound())
         {
             timer = 0;
-            currentState = State.Cahse;
-            anim.SetInteger("State", (int)AnimState.Cahse);
+            currentState = State.Chase;
+            anim.SetInteger("State", (int)AnimState.Chase);
         }
     }
 
@@ -182,8 +182,8 @@ public class Enemy : MonoBehaviour
         else if(IsFound())
         {
             timer = 0;
-            currentState = State.Cahse;
-            anim.SetInteger("State", (int)AnimState.Cahse);
+            currentState = State.Chase;
+            anim.SetInteger("State", (int)AnimState.Chase);
         }
     }
 
@@ -213,8 +213,8 @@ public class Enemy : MonoBehaviour
         if (attackTimer >= 2)
         {
             attackTimer = 0;
-            currentState = State.Cahse;
-            anim.SetInteger("State", (int)AnimState.Cahse);
+            currentState = State.Chase;
+            anim.SetInteger("State", (int)AnimState.Chase);
         }
     }
 
@@ -230,7 +230,7 @@ public class Enemy : MonoBehaviour
     void MoveEvent()
     {
         isMoving = true;
-        currentState = State.Cahse;
-        anim.SetInteger("State", (int)AnimState.Cahse);
+        currentState = State.Chase;
+        anim.SetInteger("State", (int)AnimState.Chase);
     }
 }
