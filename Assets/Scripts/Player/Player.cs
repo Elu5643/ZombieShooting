@@ -201,7 +201,7 @@ public class Player : MonoBehaviour
     {
         if (other.gameObject.tag == "EnemyAttack")
         {
-            currentHitPoint -= 100;
+            currentHitPoint -= 20;
             hp.value = currentHitPoint;
 
             // HitPointが1以上の場合ダメージ・1以下の場合死亡
