@@ -8,11 +8,10 @@ public class Player : MonoBehaviour
     [SerializeField] Slider hp = null;
     [SerializeField] Image image = null;
 
-    [SerializeField] AudioClip walkSe = null;
-    [SerializeField] AudioClip addBulletSe = null;
+    [SerializeField] AudioClip walkSE = null;
+    [SerializeField] AudioClip addBulletSE = null;
 
     [SerializeField] Camera mainCamera = null;
-    [SerializeField] FPSCamera fpsCamera = null;
     [SerializeField] ShakeCamera shake = null;
     [SerializeField] CurveControlledBob bob = null;
 
@@ -22,29 +21,29 @@ public class Player : MonoBehaviour
     AudioSource audioSource = null;
 
 
-    Vector3 hitPos;     //レイの当たった位置を取得
+    Vector3 hitPos;     // レイの当たった位置を取得
 
     public Vector3 HitPos
     {
         get { return hitPos; }
     }
 
-    int currentHitPoint;      //現在のPlayerのHitPoint
+    int currentHitPoint;      // 現在のPlayerのHitPoint
 
-    const int maxHitPoint = 100;  //最大HitPoint
+    const int maxHitPoint = 100;  // 最大HitPoint
 
-    float inputHorizontal;  //水平方向の入力
-    float inputVertical;    //垂直方向の入力
+    float inputHorizontal;  // 水平方向の入力
+    float inputVertical;    // 垂直方向の入力
 
-    float moveSpeed = 3f;   //歩くのスピード
+    float moveSpeed = 3f;   // 歩くのスピード
 
-    float jumpPower = 3.5f; //ジャンプの高さ
+    float jumpPower = 3.5f; // ジャンプの高さ
 
-    float rayLength = 200f; //Rayの長さ
+    float rayLength = 200f; // Rayの長さ
 
-    bool isStop = true;     //Playerの動きを制限（攻撃を喰らった時）
+    bool isStop = true;     // Playerの動きを制限（攻撃を喰らった時）
 
-    bool canJump = false;    //ジャンプボタンを押したか
+    bool canJump = false;    // ジャンプボタンを押したか
 
     public bool IsStop
     {
@@ -69,16 +68,16 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (IsMove() == false)
-        {
-            audioSource.Stop();
-        }
-        else
+        if (IsMove())
         {
             if (!audioSource.isPlaying)
             {
-                audioSource.PlayOneShot(walkSe);
+                audioSource.PlayOneShot(walkSE);
             }
+        }
+        else
+        {
+            audioSource.Stop();
         }
 
         if (isStop == false)
@@ -86,11 +85,9 @@ public class Player : MonoBehaviour
             inputHorizontal = Input.GetAxisRaw("Horizontal");
             inputVertical = Input.GetAxisRaw("Vertical");
 
-            IsAim();
-
             Jump();
             RayCasting();
-            CursorController();
+            ControlCursor();
 
             Vector3 vecBob = bob.DoHeadBob(0.8f, IsMove());
             mainCamera.transform.localPosition = vecBob;
@@ -126,6 +123,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    // ジャンプ
     void Jump()
     {
         if (Input.GetKeyDown(KeyCode.Space) && canJump)
@@ -135,6 +133,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    // エイム（左クリック）しているかどうか
     public bool IsAim()
     {
         if (Input.GetMouseButton(1) && !Cursor.visible)
@@ -147,6 +146,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    // 動いているか判定
     public bool IsMove()
     {
         if (rb.velocity.z == 0 || rb.velocity.x == 0)
@@ -159,6 +159,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    // Rayの当たった位置を取得
     void RayCasting()
     {
         if (!Cursor.visible)
@@ -173,7 +174,8 @@ public class Player : MonoBehaviour
         }
     }
 
-    void CursorController()
+    // カーソルを調整
+    void ControlCursor()
     {
         if (Input.GetKeyDown(KeyCode.Tab) && !Cursor.visible || 
             Input.GetKeyDown(KeyCode.Escape) && !Cursor.visible)
@@ -189,6 +191,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    // アニメーターのイベントで使用
     void DamageEvent()
     {
         isStop = false;
@@ -201,6 +204,7 @@ public class Player : MonoBehaviour
             currentHitPoint -= 100;
             hp.value = currentHitPoint;
 
+            // HitPointが1以上の場合ダメージ・1以下の場合死亡
             if (currentHitPoint >= 1)
             {
                 image.color = new Color(0.5f, 0f, 0f, 0.5f);
@@ -219,13 +223,11 @@ public class Player : MonoBehaviour
                 GameObject.Find("GameController")?.GetComponent<GameController>()?.FailureGame();
             }
         }
-
-        if(other.gameObject.tag == "BulletObj")
+        else if(other.gameObject.tag == "BulletObj")
         {
-            audioSource.PlayOneShot(addBulletSe);
+            audioSource.PlayOneShot(addBulletSE);
         }
-
-        if(other.gameObject.tag == "Clear")
+        else if(other.gameObject.tag == "Clear")
         {
             isStop = true;
             Cursor.visible = true;

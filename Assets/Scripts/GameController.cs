@@ -11,8 +11,8 @@ public class GameController : MonoBehaviour
     [SerializeField] AudioSource BGMSource = null;
     [SerializeField] AudioSource SESource = null;
 
-    [SerializeField] AudioClip clearSe = null;
-    [SerializeField] AudioClip failedSe = null;
+    [SerializeField] AudioClip clearSE = null;
+    [SerializeField] AudioClip failedSE = null;
 
     [SerializeField] Player player = null;
 
@@ -21,21 +21,24 @@ public class GameController : MonoBehaviour
         StartCoroutine(StartFadeIn());
     }
 
+    // プレイヤー側で死亡した際にこの関数を呼ぶ
     public void FailureGame()
     {
-        StartCoroutine(Result("GameOver", failedSe));
+        StartCoroutine(Result("GameOver", failedSE));
     }
 
+    // プレイヤー側でクリアした際にこの関数を呼ぶ
     public void ClearGame()
     {
-        StartCoroutine(Result("Clear", clearSe));
+        StartCoroutine(Result("Clear", clearSE));
     }
+
 
     IEnumerator StartFadeIn()
     {
         while (true)
         {
-            if (FadeManager.Instance.IsFadeOut == false)
+            if (FadeManager.Instance.IsFadeIn == false)
             {
                 player.IsStop = false;
                 yield break;

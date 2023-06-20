@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class BackMenuButton : MonoBehaviour
 {
-    [SerializeField] AudioClip checkSe = null;
+    [SerializeField] AudioClip checkSE = null;
     [SerializeField] Text colorText = null;
 
     AudioSource audioSource = null;
@@ -17,6 +17,7 @@ public class BackMenuButton : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
+    // ƒ{ƒ^ƒ“UI‚ÅŽg‚¤ˆ×public
     public void OnClickBackMenuButton()
     {
         StartCoroutine(BackMenuClick());
@@ -24,18 +25,13 @@ public class BackMenuButton : MonoBehaviour
 
     IEnumerator BackMenuClick()
     {
-        audioSource.PlayOneShot(checkSe);
+        audioSource.PlayOneShot(checkSE);
         colorText.color = new Color(0.2f, 0.8f, 0.1f, 1.0f);
-        while (true)
+        FadeManager.Instance.FadeOut();
+        while (FadeManager.Instance.IsFadeOut)
         {
-            FadeManager.Instance.FadeOut();
-            if (FadeManager.Instance.IsFadeOut == false)
-            {
-                SceneManager.LoadScene("Menu");
-                yield break;
-            }
             yield return null;
         }
-
+        SceneManager.LoadScene("Menu");
     }
 }

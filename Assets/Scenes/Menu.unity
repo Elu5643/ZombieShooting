@@ -457,7 +457,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55dd59e1b52158c4a910b117ac2c49ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkSe: {fileID: 8300000, guid: fe1d4f7eb6541c04daf15522a2062ab4, type: 3}
+  checkSE: {fileID: 8300000, guid: fe1d4f7eb6541c04daf15522a2062ab4, type: 3}
   colorText: {fileID: 186686324}
 --- !u!114 &223165974
 MonoBehaviour:
@@ -471,7 +471,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20b89479cec08554ca96d581520bd5bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkSe: {fileID: 8300000, guid: fe1d4f7eb6541c04daf15522a2062ab4, type: 3}
+  checkSE: {fileID: 8300000, guid: fe1d4f7eb6541c04daf15522a2062ab4, type: 3}
   colorText: {fileID: 2094991756}
 --- !u!82 &223165975
 AudioSource:

@@ -11,10 +11,10 @@ public class Gun : MonoBehaviour
 
     enum State
     {
-        Stay,   //止まる
-        Walk,   //歩く
-        Aim,    //照準
-        Reload  //リロード
+        Stay,   // 止まる
+        Walk,   // 歩く
+        Aim,    // 照準
+        Reload  // リロード
     }
 
     void Start()
@@ -56,6 +56,7 @@ public class Gun : MonoBehaviour
 
     public bool IsNotShot()
     {
+        // アニメーションが再生時このタイミングでは弾を打たないようにする
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Reload") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
         {
             return true;

@@ -623,7 +623,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2186aaae928704240aa1bf0dabefbcdb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkSe: {fileID: 8300000, guid: fe1d4f7eb6541c04daf15522a2062ab4, type: 3}
+  checkSE: {fileID: 8300000, guid: fe1d4f7eb6541c04daf15522a2062ab4, type: 3}
   colorText: {fileID: 2702475694539614557}
 --- !u!82 &363534271
 AudioSource:

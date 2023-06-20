@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class EndButton : MonoBehaviour
 {
-    Canvas myCanvas = null;
-    int activeCount = 1;    //アクティブにするか非アクティブ
+    Canvas canvas = null;
+    int activeCount = 1;    // アクティブにするか非アクティブ
 
     // Start is called before the first frame update
     void Start()
     {
-        myCanvas = GetComponent<Canvas>();
-        myCanvas.enabled = false;
+        canvas = GetComponent<Canvas>();
+        canvas.enabled = false;
         DontDestroyOnLoad(gameObject);
     }
 
@@ -23,23 +23,25 @@ public class EndButton : MonoBehaviour
             activeCount++;
             if (activeCount % 2 == 0)
             {
-                myCanvas.enabled = true;
+                canvas.enabled = true;
             }
             else if (activeCount % 2 == 1)
             {
-                myCanvas.enabled = false;
+                canvas.enabled = false;
             }
         }
     }
 
+    // ボタンUIで使う為public
     public void ClickedButton()
     {
         Application.Quit();
     }
 
+    // ボタンUIで使う為public
     public void NoButton()
     {
-        myCanvas.enabled = false;
+        canvas.enabled = false;
         activeCount = 1;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;

@@ -15,7 +15,7 @@ public class ItemBox : MonoBehaviour
         get { return item; }
     }
 
-    int activeCount = 1;        //アクティブにするか非アクティブ
+    int activeCount = 1;        // アクティブにするか非アクティブ
 
     // Start is called before the first frame update
     void Start()
@@ -36,8 +36,8 @@ public class ItemBox : MonoBehaviour
             obj.GetComponent<Item>().Init(gameObject, new_position, (ItemData.ID)i);
         }
 
-        item = GetComponentInChildren<Item>();  //下のコードでも可
-        //item = obj.GetComponent<Item>();
+        item = GetComponentInChildren<Item>();  // 下のコードでも可
+        // item = obj.GetComponent<Item>();
 
         obj.SetActive(false);
     }

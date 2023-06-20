@@ -10,13 +10,13 @@ public class Shooter: MonoBehaviour
     [SerializeField] Gun gun = null;
     [SerializeField] Transform playerPos = null;
 
-    [SerializeField] AudioClip shootSe = null;
-    [SerializeField] AudioClip noBulletSe = null;
-    [SerializeField] AudioClip reLoadSe = null;
+    [SerializeField] AudioClip shootSE = null;
+    [SerializeField] AudioClip noBulletSE = null;
+    [SerializeField] AudioClip reLoadSE = null;
 
     AudioSource audioSource = null;
 
-    float shotInterval;     //弾を打つインターバル
+    float shotInterval;     // 弾を打つインターバル
 
 
     void Start()
@@ -43,26 +43,27 @@ public class Shooter: MonoBehaviour
                 shotInterval = 0;
 
                 generatorObj.GetComponent<Generator>().PullObject
-                   (transform.position, transform.forward, player.IsAim(), player.IsMove(), playerPos, player.HitPos);
+                   (transform.position, transform.forward, player.IsMove(), playerPos, player.HitPos);
 
-                audioSource.PlayOneShot(shootSe);
+                audioSource.PlayOneShot(shootSE);
             }
             else if(bulletController.MainNum == 0)
             {
                 if (!audioSource.isPlaying)
                 {
-                    audioSource.PlayOneShot(noBulletSe);
+                    audioSource.PlayOneShot(noBulletSE);
                 }
             }
         }
     }
 
+    // リロードしているか判定
     public bool Reload()
     {
         if (bulletController.MainNum < 30 && bulletController.SubNum > 0 &&
            Input.GetKeyDown(KeyCode.R) && !Cursor.visible)
         {
-            audioSource.PlayOneShot(reLoadSe);
+            audioSource.PlayOneShot(reLoadSE);
             bulletController.ReloadBullet();
             return true;
         }

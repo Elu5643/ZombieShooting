@@ -8,10 +8,10 @@ public class BulletController : MonoBehaviour
     [SerializeField] TextMeshProUGUI numText = null;
     [SerializeField] ItemBox itemBox = null;
 
-    const int maxNum = 30;  //ãŒÀ’e‚Ì”
+    const int maxNum = 30;  // ãŒÀ’e‚Ì”
 
-    int mainNum = maxNum;   //Œ»Ýe‚É“ü‚Á‚Ä‚¢‚é’e
-    int subNum = maxNum;    //ƒTƒu‚Å’e‚ðŽ‚Á‚Ä‚¢‚é’e
+    int mainNum = maxNum;   // Œ»Ýe‚É“ü‚Á‚Ä‚¢‚é’e
+    int subNum = maxNum;    // ƒTƒu‚Å’e‚ðŽ‚Á‚Ä‚¢‚é’e
 
 
     public int MainNum
@@ -30,21 +30,24 @@ public class BulletController : MonoBehaviour
         numText.text = mainNum.ToString();
     }
 
+    // ƒTƒu‚Ì‹…”‚ð’Ç‰Á
     public void AddBullet()
     {
         subNum += 10;
         itemBox.Item.SetNum(subNum, ItemData.ID.Item01);
     }
 
+    // e‚ð‘Å‚Â‚½‚Ñ‚É’e‚ðŒ¸‚ç‚·
     public void ShotBullet()
     {
         mainNum -= 1;
         numText.text = mainNum.ToString();
     }
 
+    // ƒŠƒ[ƒh
     public void ReloadBullet()
     {
-        int num = maxNum;       //‹…”‚ðŒ¸‚ç‚·ˆ×‚Ì’²®•Ï”
+        int num = maxNum;       // ‹…”‚ðŒ¸‚ç‚·ˆ×‚Ì’²®•Ï”
 
         if (subNum >= maxNum)
         {

@@ -35,6 +35,7 @@ public class DBManager : MonoBehaviour
         if (this != Instance)
         {
             Destroy(gameObject);
+            return;
         }
 
         DontDestroyOnLoad(gameObject);

@@ -3,19 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
+using System;
 
 public class SceneChanger : MonoBehaviour
 {
-    void Update()
+    // 汎用性で他のシーンチェンジでも使えるように
+    public void Change(string nextName)
     {
-        if(FadeManager.Instance.IsFadeIn == false)
+        StartCoroutine(WaitChange(nextName));
+    }
+
+    IEnumerator WaitChange(string nextName)
+    {
+        while (true)
         {
-            FadeManager.Instance.FadeOut();
-            if (FadeManager.Instance.IsFadeOut == false)
+            if(FadeManager.Instance.IsFadeIn == false)
             {
-                SceneManager.LoadScene("InGame");
+                FadeManager.Instance.FadeOut();
+                break;
             }
+            yield return null;
         }
-        
+
+        while (FadeManager.Instance.IsFadeOut)
+        {
+            yield return null;
+        }
+        SceneManager.LoadScene(nextName);
     }
 }

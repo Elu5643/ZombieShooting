@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyPartHp : MonoBehaviour
 {
-    [SerializeField] int damage;    //ダメージを各部位に設定する
+    [SerializeField] int damage;    // ダメージを各部位に設定する
 
     Enemy enemy = null;
 
@@ -17,7 +17,7 @@ public class EnemyPartHp : MonoBehaviour
     {
         if (other.gameObject.tag == "Bullet")
         {
-            enemy.Damage(damage);
+            enemy.EachPartsDamage(damage);
         }
     }
 
@@ -26,7 +26,7 @@ public class EnemyPartHp : MonoBehaviour
     {
         if (other.gameObject.tag == "Bullet")
         {
-            enemy.Damage(damage);
+            enemy.EachPartsDamage(damage);
         }
     }
 
@@ -35,7 +35,7 @@ public class EnemyPartHp : MonoBehaviour
     {
         if (other.gameObject.tag == "Bullet")
         {
-            enemy.Damage(damage);
+            enemy.EachPartsDamage(damage);
         }
     }
 }

@@ -7,7 +7,7 @@ public class Generator : MonoBehaviour
     public delegate void DeleteEvent(GameObject game_obj);
 
     [SerializeField] GameObject objPrefab = null;
-    [SerializeField] int firstPoolNum = 0;    //最初に生成する数
+    [SerializeField] int firstPoolNum = 0;    // 最初に生成する数
     public List<GameObject> objects;
 
 
@@ -19,41 +19,41 @@ public class Generator : MonoBehaviour
         {
             GameObject obj = Instantiate(objPrefab);
 
-            //親子関係にする
+            // 親子関係にする
             obj.transform.parent = transform;
 
-            //非アクティブにする
+            // 非アクティブにする
             obj.SetActive(false);
 
-            //名前を変える
+            // 名前を変える
             obj.name = objPrefab.name;
 
             objects.Add(obj);
         }
     }
 
-    public GameObject PullObject(Vector3 pos, Vector3 forward, bool isAim, bool isMove,Transform playerPos, Vector3 hitPos)
+    public GameObject PullObject(Vector3 pos, Vector3 forward, bool isMove,Transform playerPos, Vector3 hitPos)
     {
         GameObject obj = null;
 
         if (objects.Count > 0)
         {
-            //配列の先頭を使用する
+            // 配列の先頭を使用する
             obj = objects[0];
 
-            //parentをnullにすると関係が解消される
+            // parentをnullにすると関係が解消される
             obj.transform.parent = null;
 
-            //アクティブにする
+            // アクティブにする
             obj.SetActive(true);
 
-            //配列から除去する
+            // 配列から除去する
             objects.Remove(obj);
 
         }
         else
         {
-            //無かったから新しく作る
+            // 無かったから新しく作る
             obj = Instantiate(objPrefab);
             obj.name = objPrefab.name;
         }
@@ -63,8 +63,8 @@ public class Generator : MonoBehaviour
         */
         obj.GetComponent<Maneged>().DeleteEvent = PushObject;
 
-        //初期化状態で返す
-        obj.GetComponent<Bullet>().Initialize(pos, forward, isAim, isMove, playerPos, hitPos);
+        // 初期化状態で返す
+        obj.GetComponent<Bullet>().Initialize(pos, forward, isMove, playerPos, hitPos);
 
         return obj;
     }
@@ -76,10 +76,10 @@ public class Generator : MonoBehaviour
             return;
         }
 
-        //親子関係を結びなおす
+        // 親子関係を結びなおす
         obj.transform.parent = transform;
 
-        //非アクティブにする
+        // 非アクティブにする
         obj.SetActive(false);
 
 
@@ -90,7 +90,7 @@ public class Generator : MonoBehaviour
         }
         else
         {
-            //あふれた分は削除
+            // あふれた分は削除
             Destroy(obj);
         }
     }

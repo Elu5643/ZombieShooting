@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class CurveControlledBob : MonoBehaviour
 {
-    [SerializeField] Player player = null;
-
     [SerializeField] float horizontalBobRange = 0.05f;
     [SerializeField] float verticalBobRange = 0.05f;
 
@@ -31,7 +29,7 @@ public class CurveControlledBob : MonoBehaviour
     Vector3 originalCameraPosition;
     float time;
 
-
+    // Å‰‚ÌƒJƒƒ‰‚Ì—h‚ê‚ğ’²®
     public void Setup(Camera camera, float bobBaseInterval)
     {
         this.bobBaseInterval = bobBaseInterval;
@@ -40,7 +38,7 @@ public class CurveControlledBob : MonoBehaviour
         time = Bobcurve[Bobcurve.length - 1].time;
     }
 
-
+    // •à‚¢‚Ä‚¢‚é‚©”»’è‚ğ‚µƒJƒƒ‰‚Ì—h‚ê‚ğ’²®
     public Vector3 DoHeadBob(float speed, bool isWalk)
     {
         if (isWalk)
