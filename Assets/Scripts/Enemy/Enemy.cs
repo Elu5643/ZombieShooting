@@ -1,50 +1,28 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] GameObject target = null;
     [SerializeField] GameObject rayPos = null;
+    [SerializeField] GameObject target = null;
     [SerializeField] GameObject bulletObj = null;
 
     [SerializeField] AudioClip walkSE = null;
     [SerializeField] AudioClip destroySE = null;
 
+    RaycastHit hit;
+
+    Dictionary<string, EnemyStateBase.Action> actions = null;
+    EnemyStateBase currentState = null;
     NavMeshAgent nav = null;
     Animator anim = null;
     AudioSource audioSource = null;
 
-    RaycastHit hit;
+    public GameObject Target { get => target; }
 
-    [SerializeField] int hitPoint = 100;    //　EnemyのHitPoint
-
-    float timer;        //　遷移する時間を計る
-    float attackTimer;  //　攻撃のクールタイム
-
-    float randomPos = 10;   //　移動する動きをランダムにする
-
+    int hitPoint = 100;    //　EnemyのHitPoint
     bool isMoving = true;    //　Enemyの動きを止める（攻撃を喰らった時）
-
-    public enum State
-    {
-        Wait,   //　止まる
-        Saerch, //　索敵
-        Chase,  //　見つけた
-        Freeze, //　停止
-    }
-
-    public enum AnimState
-    {
-        Wait,   //　止まる
-        Saerch, //　索敵
-        Chase,  //　見つけた
-        Attack, //　攻撃
-        Freeze, //　停止
-    }
-
-    State currentState = State.Wait;
 
     // Start is called before the first frame update
     void Start()
@@ -52,40 +30,42 @@ public class Enemy : MonoBehaviour
         nav = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+
+        currentState = new EnemyWaitState();
+
+        actions = new Dictionary<string, EnemyStateBase.Action>();
+        actions["Move"] = Move;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isMoving)
+        currentState = currentState.Update(this, actions, Time.deltaTime);
+
+        // 索敵範囲の判定 叉　アタックとフリーズのアニメーション時は入ってはいけない
+        if(IsFound() && anim.GetCurrentAnimatorStateInfo(0).IsName("Attack") == false && 
+           anim.GetCurrentAnimatorStateInfo(0).IsName("Freeze") == false)
         {
-            switch (currentState)
+            // 索敵範囲の中で攻撃範囲に入ったら攻撃
+            if(Vector3.Distance(transform.position, target.transform.position) <= 1.1f) 
             {
-                case State.Wait:
-                    Wait();
-                    break;
-
-                case State.Saerch:
-                    Saerch();
-                    break;
-
-                case State.Chase:
-                    Chase();
-                    break;
-
-                case State.Freeze:
-                    Freeze();
-                    break;
+                ChangeState(new EnemyAttackState(), (int)EnemyStateBase.Kind.Attack);
             }
-
-            if (!audioSource.isPlaying)
+            else
             {
-                audioSource.PlayOneShot(walkSE);
+                ChangeState(new EnemyChaseState(), (int)EnemyStateBase.Kind.Chase);
+            }
+        }
+        else
+        {
+            if (currentState.GetKind() == EnemyStateBase.Kind.Chase)
+            {
+                ChangeState(new EnemyWaitState(), (int)EnemyStateBase.Kind.Wait);
             }
         }
     }
 
-    // ダメージを喰らった
+    // ダメージを喰らう
     void Damage(int damage)
     {
         hitPoint -= damage;
@@ -100,7 +80,7 @@ public class Enemy : MonoBehaviour
         audioSource.Stop();
         anim.SetTrigger("Destroy");
         nav.SetDestination(transform.position);
-        audioSource.PlayOneShot(destroySE);
+        //audioSource.PlayOneShot(destroySE);
         Instantiate(bulletObj, transform.position, Quaternion.identity);
         isMoving = false;
     }
@@ -109,7 +89,7 @@ public class Enemy : MonoBehaviour
     public void EachPartsDamage(int damage)
     {
         if (hitPoint < 1)
-        { 
+        {
             if (isMoving)
             {
                 Destroy();
@@ -121,10 +101,28 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    // プレイヤーを発見したか
+    void Move(ref EnemyStateBase.ActionArg arg)
+    {
+        if (isMoving)
+        {
+            nav.destination = arg.pos;
+
+            if (!audioSource.isPlaying)
+            {
+                //audioSource.PlayOneShot(walkSE);
+            }
+        }
+    }
+
+    void ChangeState(EnemyStateBase newState, int animState)
+    {
+        currentState = newState;
+        anim.SetInteger("State", animState);
+    }
+
     bool IsFound()
     {
-        Vector3 playerDirection = target.transform.position - transform.position;
+        Vector3 playerDirection = Target.transform.position - transform.position;
         float angle = Vector3.Angle(transform.forward, playerDirection);
         Vector3 direction = playerDirection.normalized;
 
@@ -132,105 +130,25 @@ public class Enemy : MonoBehaviour
         {
             if (Physics.Raycast(rayPos.transform.position, direction, out hit))
             {
-                if (hit.transform.gameObject == target)
+                if (hit.transform.gameObject == Target)
                 {
                     return true;
                 }
             }
         }
-
         return false;
-    }
-
-    // 止まる
-    void Wait()
-    {
-        nav.SetDestination(transform.position);
-
-        timer += Time.deltaTime;
-        if(timer >= 5)
-        {
-            timer = 0;
-            currentState = State.Saerch;
-            anim.SetInteger("State", (int)AnimState.Saerch);
-
-            // 索敵メソッドに入ったときに移動する範囲を指定
-            Vector3 newPos = transform.position;
-            Vector3 offSet = new Vector3(Random.Range(-randomPos, randomPos), 0, Random.Range(-randomPos, randomPos));
-            newPos += offSet;
-            nav.destination = newPos;
-        }
-        else if (IsFound())
-        {
-            timer = 0;
-            currentState = State.Chase;
-            anim.SetInteger("State", (int)AnimState.Chase);
-        }
-    }
-
-
-    // 索敵
-    void Saerch()
-    {
-        timer += Time.deltaTime;
-        if (timer >= 5)
-        {
-            timer = 0;
-            currentState = State.Wait;
-            anim.SetInteger("State", (int)AnimState.Wait);
-        }
-        else if(IsFound())
-        {
-            timer = 0;
-            currentState = State.Chase;
-            anim.SetInteger("State", (int)AnimState.Chase);
-        }
-    }
-
-
-    // 見つけた
-    void Chase()
-    {
-        nav.destination = target.transform.position;
-        // 見失った時は止まる
-        if(!IsFound())
-        {
-            currentState = State.Wait;
-            anim.SetInteger("State", (int)AnimState.Wait);
-        }
-
-        if (Vector3.Distance(transform.position, target.transform.position) <= 1.1f)
-        {
-            nav.SetDestination(transform.position);
-            anim.SetInteger("State", (int)AnimState.Attack);
-        }
-    }
-
-    // プレイヤーから攻撃を喰らった際は停止
-    void Freeze()
-    {
-        attackTimer += Time.deltaTime;
-        if (attackTimer >= 2)
-        {
-            attackTimer = 0;
-            currentState = State.Chase;
-            anim.SetInteger("State", (int)AnimState.Chase);
-        }
     }
 
     // アニメーションのイベントで使用
     void FreezeEvent()
     {
-        nav.SetDestination(transform.position);
-        currentState = State.Freeze;
-        anim.SetInteger("State", (int)AnimState.Freeze);
+        ChangeState(new EnemyFreezeState(), (int)EnemyStateBase.Kind.Freeze);
     }
 
     // アニメーションのイベントで使用
     void MoveEvent()
     {
         isMoving = true;
-        currentState = State.Chase;
-        anim.SetInteger("State", (int)AnimState.Chase);
+        ChangeState(new EnemyChaseState(), (int)EnemyStateBase.Kind.Chase);
     }
 }
