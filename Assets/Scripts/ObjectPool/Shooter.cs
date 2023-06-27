@@ -7,7 +7,7 @@ public class Shooter: MonoBehaviour
     [SerializeField] Generator generatorObj = null;
     [SerializeField] Player player = null;
     [SerializeField] BulletController bulletController = null;
-    [SerializeField] Gun gun = null;
+    [SerializeField] GunAnimation gun = null;
     [SerializeField] Transform playerPos = null;
 
     [SerializeField] AudioClip shootSE = null;
@@ -58,7 +58,7 @@ public class Shooter: MonoBehaviour
     }
 
     // ÉäÉçÅ[ÉhÇµÇƒÇ¢ÇÈÇ©îªíË
-    public bool Reload()
+    public bool IsReload()
     {
         if (bulletController.MainNum < 30 && bulletController.SubNum > 0 &&
            Input.GetKeyDown(KeyCode.R) && !Cursor.visible)

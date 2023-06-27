@@ -92,6 +92,7 @@ public class Player : MonoBehaviour
             Vector3 vecBob = bob.DoHeadBob(0.8f, IsMove());
             mainCamera.transform.localPosition = vecBob;
         }
+
         if (currentHitPoint >= 1) image.color = Color.Lerp(image.color, Color.clear, Time.deltaTime);
     }
 

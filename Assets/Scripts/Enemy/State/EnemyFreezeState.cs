@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static Enemy1;
 
 public class EnemyFreezeState : EnemyStateBase
 {

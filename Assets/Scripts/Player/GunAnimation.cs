@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gun : MonoBehaviour
+public class GunAnimation : MonoBehaviour
 {
     Animator anim = null;
 
@@ -11,8 +11,8 @@ public class Gun : MonoBehaviour
 
     enum State
     {
-        Stay,   // 止まる
-        Walk,   // 歩く
+        Wait,   // 止まる
+        Move,   // 歩く
         Aim,    // 照準
         Reload  // リロード
     }
@@ -24,20 +24,20 @@ public class Gun : MonoBehaviour
 
     void Update()
     {
-        // 銃が動くアニメーション
+        // Wキーを押した際銃を動かす
         if (Input.GetKey(KeyCode.W) && anim.GetCurrentAnimatorStateInfo(0).IsName("Reload") == false)
         {
-            anim.SetInteger("State", (int)State.Walk);
+            anim.SetInteger("State", (int)State.Move);
             //  歩きうちの為
             if (Input.GetKey(KeyCode.Mouse0) && !Cursor.visible)
             {
-                anim.SetInteger("State", (int)State.Stay);
+                anim.SetInteger("State", (int)State.Wait);
             }
         }
         // 動きが止まった際
         else
         {
-            anim.SetInteger("State", (int)State.Stay);
+            anim.SetInteger("State", (int)State.Wait);
         }
 
         // エイムアニメーション
@@ -46,9 +46,8 @@ public class Gun : MonoBehaviour
             anim.SetInteger("State", (int)State.Aim);
         }
 
-
         // リロードアニメーション
-        if (shooter.Reload())
+        if (shooter.IsReload())
         {
             anim.SetInteger("State", (int)State.Reload);
         }

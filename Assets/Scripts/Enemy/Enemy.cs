@@ -64,7 +64,7 @@ public class Enemy : MonoBehaviour
         audioSource.Stop();
         anim.SetTrigger("Destroy");
         nav.SetDestination(transform.position);
-        //audioSource.PlayOneShot(destroySE);
+        audioSource.PlayOneShot(destroySE);
         Instantiate(bulletObj, transform.position, Quaternion.identity);
         isMoving = false;
     }
@@ -93,7 +93,7 @@ public class Enemy : MonoBehaviour
 
             if (!audioSource.isPlaying)
             {
-                //audioSource.PlayOneShot(walkSE);
+                audioSource.PlayOneShot(walkSE);
             }
         }
     }

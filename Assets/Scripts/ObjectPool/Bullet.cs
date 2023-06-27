@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Claims;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -62,40 +59,36 @@ public class Bullet : MonoBehaviour
         }
         else
         {
-            Vector3 dir;
+            Vector3 direction;
 
-            Func<Vector3, Vector3, float, Vector3> vec = (Vector3 velocity, Vector3 pos, float vh) =>
+            Func<Vector3, Vector3, float, Vector3> disparityVector = (Vector3 playerForward, Vector3 pos, float verticalHorizontal) =>
             {
-                return Vector3.Slerp(velocity, pos, vh);
+                return Vector3.Slerp(playerForward, pos, verticalHorizontal);
             };
 
             // c‚Ì‚Î‚ç‚Â‚«
-            float v = UnityEngine.Random.Range(-dispersion * verticalToHorizontalRatio - angle, dispersion * verticalToHorizontalRatio + angle);
-            if (v >= 0)
+            float vertical = UnityEngine.Random.Range(-dispersion * verticalToHorizontalRatio - angle, dispersion * verticalToHorizontalRatio + angle);
+            if (vertical >= 0)
             {
-                //dir = Vector3.Slerp(forward, playerPos.up, v);
-                dir = vec(forward, playerPos.up, v);
+                direction = disparityVector(forward, playerPos.up, vertical);
             }
             else
             {
-                //dir = Vector3.Slerp(forward, -playerPos.up, -v);
-                dir = vec(forward, -playerPos.up, -v);
+                direction = disparityVector(forward, -playerPos.up, -vertical);
             }
 
             // ‰¡‚Ì‚Î‚ç‚Â‚«
-            float h = UnityEngine.Random.Range(-dispersion, dispersion);
-            if (h >= 0)
+            float horizontal = UnityEngine.Random.Range(-dispersion, dispersion);
+            if (horizontal >= 0)
             {
-                //dir = Vector3.Slerp(dir, playerPos.right, h);
-                dir = vec(dir, playerPos.right, h);
+                direction = disparityVector(direction, playerPos.right, horizontal);
             }
             else
             {
-                //dir = Vector3.Slerp(dir, -playerPos.right, -h);
-                dir = vec(dir, -playerPos.right, -h);
+                direction = disparityVector(direction, -playerPos.right, -horizontal);
             }
 
-            rb.AddForce(dir.normalized * shotSpeed, ForceMode.Acceleration);
+            rb.AddForce(direction.normalized * shotSpeed, ForceMode.Acceleration);
         }
     }
 
