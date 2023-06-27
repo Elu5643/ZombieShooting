@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using static EnemyStateBase;
 
 public class Enemy : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class Enemy : MonoBehaviour
     Animator anim = null;
     AudioSource audioSource = null;
 
-    public GameObject Target { get => target; }
+    public GameObject Target { get { return target; } }
 
     int hitPoint = 100;    //　EnemyのHitPoint
     bool isMoving = true;    //　Enemyの動きを止める（攻撃を喰らった時）
@@ -40,29 +41,12 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currentState = currentState.Update(this, actions, Time.deltaTime);
+        currentState = currentState.Update(this, actions, Time.deltaTime, anim);
+    }
 
-        // 索敵範囲の判定 叉　アタックとフリーズのアニメーション時は入ってはいけない
-        if(IsFound() && anim.GetCurrentAnimatorStateInfo(0).IsName("Attack") == false && 
-           anim.GetCurrentAnimatorStateInfo(0).IsName("Freeze") == false)
-        {
-            // 索敵範囲の中で攻撃範囲に入ったら攻撃
-            if(Vector3.Distance(transform.position, target.transform.position) <= 1.1f) 
-            {
-                ChangeState(new EnemyAttackState(), (int)EnemyStateBase.Kind.Attack);
-            }
-            else
-            {
-                ChangeState(new EnemyChaseState(), (int)EnemyStateBase.Kind.Chase);
-            }
-        }
-        else
-        {
-            if (currentState.GetKind() == EnemyStateBase.Kind.Chase)
-            {
-                ChangeState(new EnemyWaitState(), (int)EnemyStateBase.Kind.Wait);
-            }
-        }
+    void ChangeState(EnemyStateBase newState)
+    {
+        currentState = newState;
     }
 
     // ダメージを喰らう
@@ -114,13 +98,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void ChangeState(EnemyStateBase newState, int animState)
-    {
-        currentState = newState;
-        anim.SetInteger("State", animState);
-    }
-
-    bool IsFound()
+    public bool IsFound()
     {
         Vector3 playerDirection = Target.transform.position - transform.position;
         float angle = Vector3.Angle(transform.forward, playerDirection);
@@ -142,13 +120,13 @@ public class Enemy : MonoBehaviour
     // アニメーションのイベントで使用
     void FreezeEvent()
     {
-        ChangeState(new EnemyFreezeState(), (int)EnemyStateBase.Kind.Freeze);
+        ChangeState(new EnemyFreezeState());
     }
 
     // アニメーションのイベントで使用
     void MoveEvent()
     {
         isMoving = true;
-        ChangeState(new EnemyChaseState(), (int)EnemyStateBase.Kind.Chase);
+        ChangeState(new EnemyChaseState());
     }
 }

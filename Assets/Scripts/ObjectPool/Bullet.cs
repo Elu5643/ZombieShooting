@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -21,8 +22,6 @@ public class Bullet : MonoBehaviour
     float timer = 0.0f;     // オブジェクトが消える時間を計る
 
     float shotSpeed = 2000f;    // 弾を飛ばすスピード
-
-    Vector3 direction;
 
     float dispersion = 0.02f; // ばらつき具合
     float verticalToHorizontalRatio = 1.5f; // ばらつきの縦横比
@@ -58,33 +57,42 @@ public class Bullet : MonoBehaviour
     {
         if (isMove == false)
         {
-            direction = hitPos - transform.position;
+            Vector3 direction = hitPos - transform.position;
             rb.AddForce(direction.normalized * shotSpeed, ForceMode.Acceleration);
         }
         else
         {
             Vector3 dir;
 
+            Func<Vector3, Vector3, float, Vector3> vec = (Vector3 velocity, Vector3 pos, float vh) =>
+            {
+                return Vector3.Slerp(velocity, pos, vh);
+            };
+
             // 縦のばらつき
-            float v = Random.Range(-dispersion * verticalToHorizontalRatio - angle, dispersion * verticalToHorizontalRatio + angle);
+            float v = UnityEngine.Random.Range(-dispersion * verticalToHorizontalRatio - angle, dispersion * verticalToHorizontalRatio + angle);
             if (v >= 0)
             {
-                dir = Vector3.Slerp(forward, playerPos.up, v);
+                //dir = Vector3.Slerp(forward, playerPos.up, v);
+                dir = vec(forward, playerPos.up, v);
             }
             else
             {
-                dir = Vector3.Slerp(forward, -playerPos.up, -v);
+                //dir = Vector3.Slerp(forward, -playerPos.up, -v);
+                dir = vec(forward, -playerPos.up, -v);
             }
 
             // 横のばらつき
-            float h = Random.Range(-dispersion, dispersion);
+            float h = UnityEngine.Random.Range(-dispersion, dispersion);
             if (h >= 0)
             {
-                dir = Vector3.Slerp(dir, playerPos.right, h);
+                //dir = Vector3.Slerp(dir, playerPos.right, h);
+                dir = vec(dir, playerPos.right, h);
             }
             else
             {
-                dir = Vector3.Slerp(dir, -playerPos.right, -h);
+                //dir = Vector3.Slerp(dir, -playerPos.right, -h);
+                dir = vec(dir, -playerPos.right, -h);
             }
 
             rb.AddForce(dir.normalized * shotSpeed, ForceMode.Acceleration);

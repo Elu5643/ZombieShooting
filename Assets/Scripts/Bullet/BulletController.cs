@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class BulletController : MonoBehaviour
 {
@@ -47,26 +48,30 @@ public class BulletController : MonoBehaviour
     // ƒŠƒ[ƒh
     public void ReloadBullet()
     {
-        int num = maxNum;       // ‹…”‚ðŒ¸‚ç‚·ˆ×‚Ì’²®•Ï”
-
-        if (subNum >= maxNum)
+        Action<bool> AdjustBulletNum = (bool is_subtraction) =>
         {
-            num -= mainNum;
-            subNum -= num;
+            int num = maxNum;   // ‹…”‚ðŒ¸‚ç‚·ˆ×‚Ì’²®•Ï”
 
-            num = maxNum;
+            num -= mainNum;
+            if (is_subtraction)
+            {
+                num *= -1;
+            }
+            subNum += num;
+        
             mainNum = maxNum;
+        };
+        
+        if (subNum + mainNum >= maxNum)
+        {
+            AdjustBulletNum(true);
         }
-        else
+        else if(subNum < mainNum)
         {
             mainNum += subNum;
             if (mainNum > maxNum)
             {
-                num -= mainNum;
-                subNum += num;
-
-                num = maxNum;
-                mainNum = maxNum;
+                AdjustBulletNum(false);
             }
             else
             {
