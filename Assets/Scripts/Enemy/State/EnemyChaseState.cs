@@ -27,7 +27,8 @@ public class EnemyChaseState : EnemyStateBase
             arg.pos = enemy.Target.transform.position;
             action(ref arg);
 
-            if (Vector3.Distance(enemy.transform.position, enemy.Target.transform.position) <= 1.1f)
+            float attackRange = 1.1f;
+            if (Vector3.Distance(enemy.transform.position, enemy.Target.transform.position) <= attackRange)
             {
                 return new EnemyAttackState();
             }
