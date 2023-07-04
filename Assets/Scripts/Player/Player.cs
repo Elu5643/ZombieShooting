@@ -137,7 +137,7 @@ public class Player : MonoBehaviour
     // エイム（左クリック）しているかどうか
     public bool IsAim()
     {
-        if (Input.GetMouseButton(1) && !Cursor.visible)
+        if (Input.GetMouseButton(1) && Cursor.visible == false)
         {
             return true;
         }
@@ -163,7 +163,7 @@ public class Player : MonoBehaviour
     // Rayの当たった位置を取得
     void RayCasting()
     {
-        if (!Cursor.visible)
+        if (Cursor.visible == false)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -178,8 +178,8 @@ public class Player : MonoBehaviour
     // カーソルを調整
     void ControlCursor()
     {
-        if (Input.GetKeyDown(KeyCode.Tab) && !Cursor.visible || 
-            Input.GetKeyDown(KeyCode.Escape) && !Cursor.visible)
+        if (Input.GetKeyDown(KeyCode.Tab) && Cursor.visible == false || 
+            Input.GetKeyDown(KeyCode.Escape) && Cursor.visible == false)
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;

@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+
 public class Bullet : MonoBehaviour
 {
     public Generator.DeleteEvent deleteEvent = null;
@@ -16,7 +17,7 @@ public class Bullet : MonoBehaviour
 
     Rigidbody rb = null;
 
-    float timer = 0.0f;     // オブジェクトが消える時間を計る
+    float timer = 0.0f;     //オブジェクトが消える時間を計る
 
     float shotSpeed = 2000f;    // 弾を飛ばすスピード
 
@@ -27,20 +28,20 @@ public class Bullet : MonoBehaviour
     // 弾を打つ際の初期化
     public void Initialize(Vector3 pos, Vector3 forward, bool isMove, Transform playerPos, Vector3 hitPos)
     {
-        timer = 0.0f;
         transform.position = pos;
         transform.forward = forward;
 
         rb.velocity = new Vector3(0, 0, 0);
         rb.angularVelocity = new Vector3(0, 0, 0);
 
-        BulletDisparity(forward, isMove, playerPos, hitPos);    // 弾のばらけ具合
+        Disparity(forward, isMove, playerPos, hitPos);    // 弾のばらけ具合
     }
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
+
     void Update()
     {
         timer += Time.deltaTime;
@@ -50,7 +51,7 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    void BulletDisparity(Vector3 forward, bool isMove, Transform playerPos, Vector3 hitPos)
+    void Disparity(Vector3 forward, bool isMove, Transform playerPos, Vector3 hitPos)
     {
         if (isMove == false)
         {
@@ -61,32 +62,28 @@ public class Bullet : MonoBehaviour
         {
             Vector3 direction;
 
-            Func<Vector3, Vector3, float, Vector3> disparityVector = (Vector3 playerForward, Vector3 pos, float verticalHorizontal) =>
+            Func<float, Vector3, Vector3, Vector3> GetDisparityDirection = (axis, startPoint, endPoint) =>
             {
-                return Vector3.Slerp(playerForward, pos, verticalHorizontal);
+                if (axis >= 0)
+                {
+                    direction = Vector3.Slerp(startPoint, endPoint, axis);
+                }
+                else
+                {
+                    direction = Vector3.Slerp(startPoint, -endPoint, axis);
+                }
+
+                return direction;
             };
 
             // 縦のばらつき
             float vertical = UnityEngine.Random.Range(-dispersion * verticalToHorizontalRatio - angle, dispersion * verticalToHorizontalRatio + angle);
-            if (vertical >= 0)
-            {
-                direction = disparityVector(forward, playerPos.up, vertical);
-            }
-            else
-            {
-                direction = disparityVector(forward, -playerPos.up, -vertical);
-            }
+            direction = GetDisparityDirection(vertical, forward, playerPos.up);
 
             // 横のばらつき
             float horizontal = UnityEngine.Random.Range(-dispersion, dispersion);
-            if (horizontal >= 0)
-            {
-                direction = disparityVector(direction, playerPos.right, horizontal);
-            }
-            else
-            {
-                direction = disparityVector(direction, -playerPos.right, -horizontal);
-            }
+            direction = GetDisparityDirection(horizontal, direction, playerPos.right);
+
 
             rb.AddForce(direction.normalized * shotSpeed, ForceMode.Acceleration);
         }

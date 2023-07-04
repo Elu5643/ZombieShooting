@@ -98,6 +98,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    // Player‚ğŒ©‚Â‚¯‚½‚©H
     public bool IsFound()
     {
         Vector3 playerDirection = Target.transform.position - transform.position;

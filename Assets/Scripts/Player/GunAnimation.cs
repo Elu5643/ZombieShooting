@@ -24,8 +24,13 @@ public class GunAnimation : MonoBehaviour
 
     void Update()
     {
+        // リロードアニメーション
+        if (shooter.IsReload())
+        {
+            anim.SetInteger("State", (int)State.Reload);
+        }
         // Wキーを押した際銃を動かす
-        if (Input.GetKey(KeyCode.W) && anim.GetCurrentAnimatorStateInfo(0).IsName("Reload") == false)
+        else if (Input.GetKey(KeyCode.W) && anim.GetCurrentAnimatorStateInfo(0).IsName("Reload") == false)
         {
             anim.SetInteger("State", (int)State.Move);
             //  歩きうちの為
@@ -34,22 +39,15 @@ public class GunAnimation : MonoBehaviour
                 anim.SetInteger("State", (int)State.Wait);
             }
         }
-        // 動きが止まった際
-        else
-        {
-            anim.SetInteger("State", (int)State.Wait);
-        }
-
         // エイムアニメーション
-        if (player.IsAim() && anim.GetCurrentAnimatorStateInfo(0).IsName("Reload") == false)
+        else if (player.IsAim() && anim.GetCurrentAnimatorStateInfo(0).IsName("Reload") == false)
         {
             anim.SetInteger("State", (int)State.Aim);
         }
-
-        // リロードアニメーション
-        if (shooter.IsReload())
+        // 動きが止まった際
+        else if(!Input.GetKey(KeyCode.W))
         {
-            anim.SetInteger("State", (int)State.Reload);
+            anim.SetInteger("State", (int)State.Wait);
         }
     }
 
