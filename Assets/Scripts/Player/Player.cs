@@ -113,7 +113,7 @@ public class Player : MonoBehaviour
         Vector3 moveForward = cameraForward * inputVertical + Camera.main.transform.right * inputHorizontal;
 
         // 移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-        // 標準した時は速度は下げる
+        // 照準した時は速度は下げる
         if (IsAim())
         {
             rb.velocity = moveForward * (moveSpeed - 1.5f) + new Vector3(0, rb.velocity.y, 0);
@@ -165,11 +165,14 @@ public class Player : MonoBehaviour
     {
         if (Cursor.visible == false)
         {
+            // 今自分が見ている方向
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             int layerMask = 1 << 8;
+            // 当たったオブジェクトがlayerMaskの1～8か
             if (Physics.Raycast(ray, out hit, rayLength, layerMask))
             {
+                // 座標を渡す
                 hitPos = hit.point;
             }
         }

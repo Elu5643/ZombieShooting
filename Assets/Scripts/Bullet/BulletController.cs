@@ -69,7 +69,6 @@ public class BulletController : MonoBehaviour
         else
         {
             mainNum += subNum;
-            Debug.Log("A");
             if (mainNum > maxNum)
             {
                 AdjustBulletNum(false);
