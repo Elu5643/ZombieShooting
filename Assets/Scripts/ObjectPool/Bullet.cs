@@ -101,7 +101,7 @@ public class Bullet : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy")
         {
-            GetComponent<Maneged>().ExecuteEvent(gameObject);
+            maneged.ExecuteEvent(gameObject);
         }
     }
 
@@ -110,7 +110,7 @@ public class Bullet : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy")
         {
-            GetComponent<Maneged>().ExecuteEvent(gameObject);
+            maneged.ExecuteEvent(gameObject);
         }
     }
 
@@ -119,7 +119,7 @@ public class Bullet : MonoBehaviour
     {
         if (other.gameObject.tag == "Enemy")
         {
-            GetComponent<Maneged>().ExecuteEvent(gameObject);
+            maneged.ExecuteEvent(gameObject);
         }
     }
 }
