@@ -1,10 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 
 public class Bullet : MonoBehaviour
 {
     public Generator.DeleteEvent deleteEvent = null;
+
+    Maneged maneged = null;
 
     GameObject generator = null;
     public GameObject Generator
@@ -42,12 +45,17 @@ public class Bullet : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    void Start()
+    {
+        maneged = GetComponent<Maneged>();
+    }
+
     void Update()
     {
         timer += Time.deltaTime;
         if (timer > 3.0f)
         {
-            GetComponent<Maneged>().ExecuteEvent(gameObject);
+            maneged.ExecuteEvent(gameObject);
         }
     }
 

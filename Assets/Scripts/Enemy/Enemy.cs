@@ -105,7 +105,9 @@ public class Enemy : MonoBehaviour
         float angle = Vector3.Angle(transform.forward, playerDirection);
         Vector3 direction = playerDirection.normalized;
 
-        if (angle < 100)
+        float searchAngle = 100;
+
+        if (angle < searchAngle)
         {
             if (Physics.Raycast(rayPos.transform.position, direction, out hit))
             {
