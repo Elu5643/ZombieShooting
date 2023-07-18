@@ -29,8 +29,13 @@ public class GunAnimation : MonoBehaviour
         {
             anim.SetInteger("State", (int)State.Reload);
         }
+        // “®‚«‚ª~‚Ü‚Á‚½Û
+        else if (Input.GetKey(KeyCode.W) == false)
+        {
+            anim.SetInteger("State", (int)State.Wait);
+        }
         // WƒL[‚ğ‰Ÿ‚µ‚½Ûe‚ğ“®‚©‚·
-        else if (Input.GetKey(KeyCode.W) && anim.GetCurrentAnimatorStateInfo(0).IsName("Reload") == false)
+        else if (Input.GetKey(KeyCode.W) && anim.GetCurrentAnimatorStateInfo(0).IsName("Reload") == false || player.IsStop)
         {
             anim.SetInteger("State", (int)State.Move);
             //  •à‚«‚¤‚¿‚Ìˆ×
@@ -44,11 +49,7 @@ public class GunAnimation : MonoBehaviour
         {
             anim.SetInteger("State", (int)State.Aim);
         }
-        // “®‚«‚ª~‚Ü‚Á‚½Û
-        else if(!Input.GetKey(KeyCode.W))
-        {
-            anim.SetInteger("State", (int)State.Wait);
-        }
+        
     }
 
     public bool IsNotShot()

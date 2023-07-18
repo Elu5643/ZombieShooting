@@ -97,27 +97,9 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.tag == "Enemy")
-        {
-            maneged.ExecuteEvent(gameObject);
-        }
-    }
-
-    // Rigidbody‚Ìİ’è‚ÅContinuous Dynamic‚É‚µ‚Ä‚¢‚é‚¯‚Ç‚·‚è”²‚¯‚½Û‚Ì•ÛŒ¯
-    void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.tag == "Enemy")
-        {
-            maneged.ExecuteEvent(gameObject);
-        }
-    }
-
-    // Rigidbody‚Ìİ’è‚ÅContinuous Dynamic‚É‚µ‚Ä‚¢‚é‚¯‚Ç‚·‚è”²‚¯‚½Û‚Ì•ÛŒ¯
-    void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Ground")
         {
             maneged.ExecuteEvent(gameObject);
         }

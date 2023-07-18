@@ -8,6 +8,7 @@ public class GameController : MonoBehaviour
     [SerializeField] Text resultText = null;
 
     [SerializeField] AudioSource BGMSource = null;
+    [SerializeField] AudioSource RainSource = null;
     [SerializeField] AudioSource SESource = null;
 
     [SerializeField] AudioClip clearSE = null;
@@ -50,6 +51,7 @@ public class GameController : MonoBehaviour
     {
         const float staySecond = 3.0f;
         BGMSource.Stop();
+        RainSource.Stop();
         resultText.text = message;
         SESource.PlayOneShot(se);
 

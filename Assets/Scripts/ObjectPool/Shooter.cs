@@ -6,7 +6,7 @@ public class Shooter: MonoBehaviour
 {
     [SerializeField] Generator generatorObj = null;
     [SerializeField] Player player = null;
-    [SerializeField] BulletController bulletController = null;
+    [SerializeField] MagazineController magazine = null;
     [SerializeField] GunAnimation gun = null;
     [SerializeField] Transform playerPos = null;
 
@@ -37,9 +37,9 @@ public class Shooter: MonoBehaviour
         shotInterval += Time.deltaTime;
         if (Input.GetKey(KeyCode.Mouse0) && !Cursor.visible && gun.IsNotShot() == false)
         {
-            if (shotInterval > 0.2f && bulletController.MainNum > 0)
+            if (shotInterval > 0.2f && magazine.MainNum > 0)
             {
-                bulletController.ShotBullet();
+                magazine.Shot();
                 shotInterval = 0;
 
                 generatorObj.GetComponent<Generator>().PullObject
@@ -47,7 +47,7 @@ public class Shooter: MonoBehaviour
 
                 audioSource.PlayOneShot(shootSE);
             }
-            else if(bulletController.MainNum == 0)
+            else if(magazine.MainNum == 0)
             {
                 if (!audioSource.isPlaying)
                 {
@@ -60,11 +60,11 @@ public class Shooter: MonoBehaviour
     // ÉäÉçÅ[ÉhÇµÇƒÇ¢ÇÈÇ©îªíË
     public bool IsReload()
     {
-        if (bulletController.MainNum < 30 && bulletController.SubNum > 0 &&
+        if (magazine.MainNum < 30 && magazine.SubNum > 0 &&
            Input.GetKeyDown(KeyCode.R) && !Cursor.visible)
         {
             audioSource.PlayOneShot(reLoadSE);
-            bulletController.ReloadBullet();
+            magazine.Reload();
             return true;
         }
         return false;

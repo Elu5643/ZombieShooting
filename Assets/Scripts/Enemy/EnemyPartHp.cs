@@ -13,25 +13,7 @@ public class EnemyPartHp : MonoBehaviour
         enemy = GetComponentInParent<Enemy>();
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Bullet")
-        {
-            enemy.EachPartsDamage(damage);
-        }
-    }
-
-    // Ç‡ÇµÇ∑ÇËî≤ÇØÇΩç€ÇÃï€åØ
-    void OnTriggerStay(Collider other)
-    {
-        if (other.gameObject.tag == "Bullet")
-        {
-            enemy.EachPartsDamage(damage);
-        }
-    }
-
-    // Ç‡ÇµÇ∑ÇËî≤ÇØÇΩç€ÇÃï€åØ
-    void OnTriggerExit(Collider other)
+    void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag == "Bullet")
         {

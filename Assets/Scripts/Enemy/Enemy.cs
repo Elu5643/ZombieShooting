@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using static EnemyStateBase;
 
 public class Enemy : MonoBehaviour
 {
@@ -23,7 +22,17 @@ public class Enemy : MonoBehaviour
     public GameObject Target { get { return target; } }
 
     int hitPoint = 100;    //　EnemyのHitPoint
-    bool isMoving = true;    //　Enemyの動きを止める（攻撃を喰らった時）
+    public int HitPoint
+    {
+        get { return hitPoint; }
+    }
+
+    bool isMoving = true;    // Enemyの動きを止める（攻撃を喰らった時）
+    bool isDestroy = false;  // Enemyが死亡したか？
+    public bool IsDestroy
+    {
+        get { return isDestroy; }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -67,6 +76,7 @@ public class Enemy : MonoBehaviour
         audioSource.PlayOneShot(destroySE);
         Instantiate(bulletObj, transform.position, Quaternion.identity);
         isMoving = false;
+        isDestroy = true;
     }
 
     // 各部位のダメージの引数で持ってくる
