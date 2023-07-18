@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using TreeEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class MiniMapPlayer : MonoBehaviour
