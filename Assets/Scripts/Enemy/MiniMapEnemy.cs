@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MiniMapEnemy : MonoBehaviour
 {
-
     Enemy enemy = null;
+
     void Start()
     {
         enemy = GetComponentInParent<Enemy>();
@@ -19,7 +19,7 @@ public class MiniMapEnemy : MonoBehaviour
 
         if(enemy.IsDestroy) 
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

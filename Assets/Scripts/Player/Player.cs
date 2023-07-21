@@ -1,11 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     [SerializeField] Slider hp = null;
+    [SerializeField] Slider stm = null;
+    public Slider Stm
+    { 
+        get { return stm; }
+    }
+
     [SerializeField] Image image = null;
 
     [SerializeField] AudioClip walkSE = null;
@@ -18,6 +23,7 @@ public class Player : MonoBehaviour
 
     Animator anim = null;
     Rigidbody rb = null;
+    BoxCollider box = null;
     AudioSource audioSource = null;
 
 
@@ -35,15 +41,7 @@ public class Player : MonoBehaviour
     float inputHorizontal;  // 水平方向の入力
     float inputVertical;    // 垂直方向の入力
 
-    float moveSpeed = 3f;   // 歩くのスピード
-
-    float jumpPower = 3.5f; // ジャンプの高さ
-
-    float rayLength = 200f; // Rayの長さ
-
     bool isStop = true;     // Playerの動きを制限（攻撃を喰らった時）
-
-    bool canJump = false;    // ジャンプボタンを押したか
 
     public bool IsStop
     {
@@ -51,11 +49,14 @@ public class Player : MonoBehaviour
         set { isStop = value; }
     }
 
+    bool canJump = false;    // ジャンプボタンを押したか
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+        box= GetComponent<BoxCollider>();
 
         currentHitPoint = maxHitPoint;
         image.color = Color.clear;
@@ -64,6 +65,8 @@ public class Player : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         bob.Setup(mainCamera, 1f);
+
+        box.enabled = false;
     }
 
     void Update()
@@ -85,6 +88,7 @@ public class Player : MonoBehaviour
             inputHorizontal = Input.GetAxisRaw("Horizontal");
             inputVertical = Input.GetAxisRaw("Vertical");
 
+            Move();
             Jump();
             RayCasting();
             ControlCursor();
@@ -96,40 +100,58 @@ public class Player : MonoBehaviour
         if (currentHitPoint >= 1) image.color = Color.Lerp(image.color, Color.clear, Time.deltaTime);
     }
 
-    void FixedUpdate()
+    void Move()
     {
-        if (isStop == false)
-        {
-            Walk();
-        }
-    }
+        float moveSpeed = 3f;   // 歩くのスピード
+        float runSpeed = 1.5f;  // 走った時のスピード
+        float aimSpeed = 1.5f;  // エイムした時のスピード
+        float stmDecreaseSpeed = 25.0f; // スタミナが減る速度
+        float stmRecoverSpeed = 10.0f;  // スタミナが増える速度
 
-    void Walk()
-    {
         // カメラの方向から、X-Z平面の単位ベクトルを取得
         Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
 
         // 方向キーの入力値とカメラの向きから、移動方向を決定
         Vector3 moveForward = cameraForward * inputVertical + Camera.main.transform.right * inputHorizontal;
 
-        // 移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
+        // 移動方向にスピードを掛ける。
         // 照準した時は速度は下げる
         if (IsAim())
         {
-            rb.velocity = moveForward * (moveSpeed - 1.5f) + new Vector3(0, rb.velocity.y, 0);
+            rb.velocity = moveForward * (moveSpeed - aimSpeed) + new Vector3(0, rb.velocity.y, 0);
         }
+        // 走ったらスタミナを減らす
+        else if(Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.LeftShift) && stm.value > 0)
+        {
+            rb.velocity = moveForward * (moveSpeed + runSpeed) + new Vector3(0, rb.velocity.y, 0);
+            stm.value -= Time.deltaTime * stmDecreaseSpeed;
+            audioSource.pitch = 1.5f;
+            box.enabled = true;
+        }
+        // 歩くスピード
         else
         {
             rb.velocity = moveForward * moveSpeed + new Vector3(0, rb.velocity.y, 0);
+            audioSource.pitch = 1.0f;
+        }
+
+        // 走っていない場合スタミナを回復する
+        if(Input.GetKey(KeyCode.LeftShift) == false)
+        {
+            stm.value += Time.deltaTime * stmRecoverSpeed;
+            box.enabled = false;
         }
     }
 
     // ジャンプ
     void Jump()
     {
+        float jumpPower = 3.5f; // ジャンプの高さ
+
         if (Input.GetKeyDown(KeyCode.Space) && canJump)
         {
-            rb.AddForce(transform.up * jumpPower, ForceMode.Impulse);
+            rb.velocity = transform.up * jumpPower;
+            // rb.AddForce(transform.up * jumpPower, ForceMode.Impulse);
             canJump = false;
         }
     }
@@ -163,6 +185,8 @@ public class Player : MonoBehaviour
     // Rayの当たった位置を取得
     void RayCasting()
     {
+        float rayLength = 200f; // Rayの長さ
+
         if (Cursor.visible == false)
         {
             // 今自分が見ている方向
@@ -240,7 +264,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay(Collision other)
+    private void OnCollisionEnter(Collision other)
     {
         if(other.gameObject.tag == "Ground")
         {

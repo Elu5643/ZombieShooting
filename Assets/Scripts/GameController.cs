@@ -18,7 +18,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(StartFadeIn());
+        StartCoroutine(WaitingEndFadeIn());
     }
 
     // ƒvƒŒƒCƒ„[‘¤‚Å€–S‚µ‚½Û‚É‚±‚ÌŠÖ”‚ğŒÄ‚Ô
@@ -34,7 +34,7 @@ public class GameController : MonoBehaviour
     }
 
 
-    IEnumerator StartFadeIn()
+    IEnumerator WaitingEndFadeIn()
     {
         while (true)
         {

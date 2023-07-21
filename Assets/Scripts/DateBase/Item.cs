@@ -28,7 +28,7 @@ public class Item : MonoBehaviour
         numText.text = item_num.Num.ToString();
     }
 
-    public void SetNum(int num, ItemData.ID item_id)
+    public void itemDisplay(int num, ItemData.ID item_id)
     {
         switch(item_id)
         {

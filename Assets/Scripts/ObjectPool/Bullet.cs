@@ -1,12 +1,11 @@
 using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
-
 
 public class Bullet : MonoBehaviour
 {
     public Generator.DeleteEvent deleteEvent = null;
 
+    ParticleSystem particle = null;
     Maneged maneged = null;
 
     GameObject generator = null;
@@ -43,11 +42,12 @@ public class Bullet : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        maneged = GetComponent<Maneged>();
     }
 
     void Start()
     {
-        maneged = GetComponent<Maneged>();
+        particle = GameObject.Find("HitEffect").GetComponent<ParticleSystem>();
     }
 
     void Update()
@@ -99,7 +99,13 @@ public class Bullet : MonoBehaviour
 
     void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Ground")
+        if (other.gameObject.tag == "Enemy")
+        {
+            particle.transform.position = transform.position;
+            particle.Play();
+            maneged.ExecuteEvent(gameObject);
+        }
+        else if (other.gameObject.tag == "Ground")
         {
             maneged.ExecuteEvent(gameObject);
         }

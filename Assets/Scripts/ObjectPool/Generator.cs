@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Generator : MonoBehaviour
 {
-    public delegate void DeleteEvent(GameObject game_obj);
+    public delegate void DeleteEvent(GameObject gameObj);
 
     [SerializeField] GameObject objPrefab = null;
     [SerializeField] int firstPoolNum = 0;    // Å‰‚É¶¬‚·‚é”

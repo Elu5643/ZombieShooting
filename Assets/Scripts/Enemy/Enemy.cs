@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -53,7 +54,7 @@ public class Enemy : MonoBehaviour
         currentState = currentState.Update(this, actions, Time.deltaTime, anim);
     }
 
-    void ChangeState(EnemyStateBase newState)
+    public void ChangeState(EnemyStateBase newState)
     {
         currentState = newState;
     }
@@ -137,9 +138,23 @@ public class Enemy : MonoBehaviour
     }
 
     // アニメーションのイベントで使用
-    void MoveEvent()
+    void DamageEvent()
     {
         isMoving = true;
         ChangeState(new EnemyChaseState());
+    }
+
+    // アニメーションのイベントで使用
+    void DestroyEvent()
+    {
+        gameObject.SetActive(false);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Player")
+        {
+            ChangeState(new EnemyChaseState());
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Shooter: MonoBehaviour
@@ -14,14 +15,16 @@ public class Shooter: MonoBehaviour
     [SerializeField] AudioClip noBulletSE = null;
     [SerializeField] AudioClip reLoadSE = null;
 
+    ParticleSystem particle = null;
+
     AudioSource audioSource = null;
 
     float shotInterval;     // 弾を打つインターバル
 
-
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        particle = GetComponent<ParticleSystem>();
     }
 
     void Update()
@@ -40,6 +43,8 @@ public class Shooter: MonoBehaviour
             if (shotInterval > 0.2f && magazine.MainNum > 0)
             {
                 magazine.Shot();
+                particle.Play();
+
                 shotInterval = 0;
 
                 generatorObj.GetComponent<Generator>().PullObject
@@ -58,7 +63,7 @@ public class Shooter: MonoBehaviour
     }
 
     // リロードしているか判定
-    public bool IsReload()
+    public bool Reload()
     {
         if (magazine.MainNum < 30 && magazine.SubNum > 0 &&
            Input.GetKeyDown(KeyCode.R) && !Cursor.visible)

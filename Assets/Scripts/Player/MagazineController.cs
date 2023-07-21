@@ -37,7 +37,7 @@ public class MagazineController : MonoBehaviour
     public void Add()
     {
         subNum += 10;
-        itemBox.Item.SetNum(subNum, ItemData.ID.Item01);
+        itemBox.Item.itemDisplay(subNum, ItemData.ID.Item01);
     }
 
     // e‚ğ‘Å‚Â‚½‚Ñ‚É’e‚ğŒ¸‚ç‚·
@@ -82,6 +82,6 @@ public class MagazineController : MonoBehaviour
         }
 
         numText.text = mainNum.ToString();
-        itemBox.Item.SetNum(subNum, ItemData.ID.Item01);
+        itemBox.Item.itemDisplay(subNum, ItemData.ID.Item01);
     }
 }

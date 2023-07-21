@@ -26,6 +26,8 @@ public class SceneChanger : MonoBehaviour
             yield return null;
         }
 
+        // yield return new WaitForSeconds(); ‚±‚±‚Åˆ—‚ğŠÔ’â~‚¾‚Á‚½‚èˆê’â~‚µ‚½‚è‚Å‚«‚é
+
         while (FadeManager.Instance.IsFadeOut)
         {
             yield return null;

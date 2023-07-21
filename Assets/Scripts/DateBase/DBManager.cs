@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class DBManager : MonoBehaviour
 {
+    [SerializeField]
+    ItemDB itemDB = null;
+
+
     static public DBManager Instance
     {
         get
@@ -24,10 +28,6 @@ public class DBManager : MonoBehaviour
     {
         return itemDB.GetItem(id);
     }
-
-
-    [SerializeField]
-    ItemDB itemDB = null;
 
 
     void Awake()
