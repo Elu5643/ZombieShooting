@@ -14,7 +14,6 @@ public class GunAnimation : MonoBehaviour
         Wait,   // 止まる
         Move,   // 歩く
         Aim,    // 照準
-        Reload, // リロード
         Run,    // 走る
     }
 
@@ -28,7 +27,7 @@ public class GunAnimation : MonoBehaviour
         // リロードアニメーション
         if (shooter.Reload())
         {
-            anim.SetInteger("State", (int)State.Reload);
+            anim.SetTrigger("Reload");
         }
         // エイムアニメーション
         else if (player.IsAim())
@@ -43,7 +42,6 @@ public class GunAnimation : MonoBehaviour
         // Wキーを押した際銃を動かす
         else if (Input.GetKey(KeyCode.W) || player.IsStop)
         {
-            anim.SetInteger("State", (int)State.Move);
             //  歩きうちの為
             if (Input.GetKey(KeyCode.Mouse0) && !Cursor.visible)
             {
@@ -53,8 +51,11 @@ public class GunAnimation : MonoBehaviour
             {
                 anim.SetInteger("State", (int)State.Run);
             }
+            else
+            {
+                anim.SetInteger("State", (int)State.Move);
+            }
         }
-
     }
 
     public bool IsNotShot()
@@ -62,11 +63,11 @@ public class GunAnimation : MonoBehaviour
         // アニメーションが再生時このタイミングでは弾を打たないようにする
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Reload") || anim.GetCurrentAnimatorStateInfo(0).IsName("Walk"))
         {
-            return true;
+            return false;
         }
         else
         {
-            return false;
+            return true;
         }
     }
 }

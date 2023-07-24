@@ -38,7 +38,7 @@ public class Shooter: MonoBehaviour
     void ShotBullet()
     {
         shotInterval += Time.deltaTime;
-        if (Input.GetKey(KeyCode.Mouse0) && !Cursor.visible && gun.IsNotShot() == false)
+        if (Input.GetKey(KeyCode.Mouse0) && !Cursor.visible && gun.IsNotShot())
         {
             if (shotInterval > 0.2f && magazine.MainNum > 0)
             {

@@ -9,6 +9,11 @@ public class FPSCamera : MonoBehaviour
     [Range(0.1f, 10f)]
     // カメラ感度、数値が大きいほどより直感的な操作が可能.
     [SerializeField] float lookSensitivity = 5f;
+
+    [Range(0.1f, 10f)]
+    // エイムした時のカメラ感度、数値が大きいほどより直感的な操作が可能.
+    [SerializeField] float aimSensitivity = 2.5f;
+
     [Range(0.1f, 1f)]
     // 数値が大きいほどカメラが向きたい方向に向くまでの時間が長くなる.
     [SerializeField] float lookSmooth = 0.1f;
@@ -30,8 +35,15 @@ public class FPSCamera : MonoBehaviour
         {
             if (!Cursor.visible)
             {
-                yRot += Input.GetAxis("Mouse X") * lookSensitivity; // マウスの移動.
-                xRot -= Input.GetAxis("Mouse Y") * lookSensitivity; // マウスの移動.
+                if(player.IsAim())
+                {
+                    LookorAim(aimSensitivity);
+                }
+                else
+                {
+                    LookorAim(lookSensitivity);
+                }
+
                 xRot = Mathf.Clamp(xRot, MinMaxAngle.x, MinMaxAngle.y);// 上下の角度移動の最大、最小.
 
                 currentXRot = Mathf.SmoothDamp(currentXRot, xRot, ref xRotVelocity, lookSmooth);
@@ -40,5 +52,11 @@ public class FPSCamera : MonoBehaviour
                 transform.rotation = Quaternion.Euler(currentXRot, currentYRot, 0);
             }
         }
+    }
+
+    void LookorAim(float sensitivity)
+    {
+        yRot += Input.GetAxis("Mouse X") * sensitivity; // マウスの移動.
+        xRot -= Input.GetAxis("Mouse Y") * sensitivity; // マウスの移動.
     }
 }

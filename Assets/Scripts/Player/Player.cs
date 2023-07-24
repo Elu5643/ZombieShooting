@@ -133,13 +133,13 @@ public class Player : MonoBehaviour
         {
             rb.velocity = moveForward * moveSpeed + new Vector3(0, rb.velocity.y, 0);
             audioSource.pitch = 1.0f;
+            box.enabled = false;
         }
 
         // 走っていない場合スタミナを回復する
-        if(Input.GetKey(KeyCode.LeftShift) == false)
+        if (Input.GetKey(KeyCode.LeftShift) == false)
         {
             stm.value += Time.deltaTime * stmRecoverSpeed;
-            box.enabled = false;
         }
     }
 

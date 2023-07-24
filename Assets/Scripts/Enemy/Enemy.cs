@@ -29,11 +29,6 @@ public class Enemy : MonoBehaviour
     }
 
     bool isMoving = true;    // Enemyの動きを止める（攻撃を喰らった時）
-    bool isDestroy = false;  // Enemyが死亡したか？
-    public bool IsDestroy
-    {
-        get { return isDestroy; }
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -43,7 +38,6 @@ public class Enemy : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
 
         currentState = new EnemyWaitState();
-
         actions = new Dictionary<string, EnemyStateBase.Action>();
         actions["Move"] = Move;
     }
@@ -77,7 +71,6 @@ public class Enemy : MonoBehaviour
         audioSource.PlayOneShot(destroySE);
         Instantiate(bulletObj, transform.position, Quaternion.identity);
         isMoving = false;
-        isDestroy = true;
     }
 
     // 各部位のダメージの引数で持ってくる
@@ -85,8 +78,8 @@ public class Enemy : MonoBehaviour
     {
         if (hitPoint < 1)
         {
-            if (isMoving)
-            {
+            if(isMoving) 
+            { 
                 Destroy();
             }
         }
@@ -150,6 +143,7 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    // プレイヤーが走っていたら見つける判定になる
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")

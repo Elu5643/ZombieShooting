@@ -17,7 +17,7 @@ public class MiniMapEnemy : MonoBehaviour
         Quaternion targetRotation = transform.rotation;
         transform.rotation = Quaternion.Euler(90, targetRotation.eulerAngles.y, 0);
 
-        if(enemy.IsDestroy) 
+        if(enemy.HitPoint < 1) 
         {
             gameObject.SetActive(false);
         }
