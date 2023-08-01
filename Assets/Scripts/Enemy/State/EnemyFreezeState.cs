@@ -25,7 +25,8 @@ public class EnemyFreezeState : EnemyStateBase
         timer += delta_time;
         if (timer > WaitTime)
         {
-            return new EnemyWaitState();
+            timer = 0.0f;
+            return new EnemyChaseState();
         }
         return this;
     }

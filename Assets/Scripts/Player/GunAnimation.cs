@@ -24,6 +24,11 @@ public class GunAnimation : MonoBehaviour
 
     void Update()
     {
+        if(player.IsStop) 
+        {
+            return;
+        }
+
         // リロードアニメーション
         if (shooter.Reload())
         {
@@ -47,7 +52,7 @@ public class GunAnimation : MonoBehaviour
             {
                 anim.SetInteger("State", (int)State.Wait);
             }
-            else if(Input.GetKey(KeyCode.LeftShift) && player.Stm.value > 0)
+            else if (Input.GetKey(KeyCode.LeftShift) && player.Stm.value > 0)
             {
                 anim.SetInteger("State", (int)State.Run);
             }

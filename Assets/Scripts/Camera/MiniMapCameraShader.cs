@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class MiniMapCameraShader : MonoBehaviour
 {
-    Camera camera = null;
+    Camera myCamera = null;
     void Start()
     {
-        camera = GameObject.Find("MiniMapCamera").GetComponent<Camera>();
-        camera.SetReplacementShader(Shader.Find("Unlit/Color"), "RenderType");
+        myCamera = GameObject.Find("MiniMapCamera").GetComponent<Camera>();
+        myCamera.SetReplacementShader(Shader.Find("Unlit/Color"), "RenderType");
     }
 }

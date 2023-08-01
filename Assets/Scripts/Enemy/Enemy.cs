@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour
 
     public GameObject Target { get { return target; } }
 
-    int hitPoint = 100;    //Å@EnemyÇÃHitPoint
+    [SerializeField] int hitPoint = 100;    //Å@EnemyÇÃHitPoint
     public int HitPoint
     {
         get { return hitPoint; }
@@ -65,11 +65,14 @@ public class Enemy : MonoBehaviour
     // éÄñS
     void Destroy()
     {
+        float random = Random.Range(1, 11);
         audioSource.Stop();
         anim.SetTrigger("Destroy");
         nav.SetDestination(transform.position);
         audioSource.PlayOneShot(destroySE);
-        Instantiate(bulletObj, transform.position, Quaternion.identity);
+
+        if(random <= 5) { Instantiate(bulletObj, transform.position, Quaternion.identity); }
+
         isMoving = false;
     }
 
@@ -82,6 +85,7 @@ public class Enemy : MonoBehaviour
             { 
                 Destroy();
             }
+            return;
         }
         else
         {

@@ -21,7 +21,7 @@ public class Bullet : MonoBehaviour
 
     float timer = 0.0f;     //オブジェクトが消える時間を計る
 
-    float shotSpeed = 2000f;    // 弾を飛ばすスピード
+    float shotSpeed = 5000f;    // 弾を飛ばすスピード
 
     float dispersion = 0.02f; // ばらつき具合
     float verticalToHorizontalRatio = 1.5f; // ばらつきの縦横比
