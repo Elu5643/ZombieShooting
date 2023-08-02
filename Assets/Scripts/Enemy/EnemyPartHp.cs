@@ -8,6 +8,8 @@ public class EnemyPartHp : MonoBehaviour
     Transform player = null;
     CapsuleCollider myCollider = null;
 
+    float checkColliderRange = 20;
+
     void Start()
     {
         enemy = GetComponentInParent<Enemy>();
@@ -18,9 +20,8 @@ public class EnemyPartHp : MonoBehaviour
     void Update()
     {
         float distance = Vector3.Distance(transform.position, player.transform.position);
-        float colliderDistance = 20;
 
-        if (distance < colliderDistance) 
+        if (distance < checkColliderRange) 
         {
             myCollider.enabled = true;
         }

@@ -6,6 +6,8 @@ public class StartSceneController : MonoBehaviour
 {
     SceneChanger start;
 
+    float waitTime = 2.0f;
+
     void Awake()
     {
         start = GetComponent<SceneChanger>();
@@ -13,6 +15,6 @@ public class StartSceneController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        start.Change("InGame");
+        start.Change("InGame", waitTime);
     }
 }
