@@ -29,6 +29,8 @@ public class Enemy : MonoBehaviour
     }
 
     bool isMoving = true;    // Enemyの動きを止める（攻撃を喰らった時）
+    float searchAngle = 100; // 見つかる範囲
+    float moveRange = 20;    // ターゲットとの距離が値より小さければ動く
 
     // Start is called before the first frame update
     void Start()
@@ -113,9 +115,10 @@ public class Enemy : MonoBehaviour
         float angle = Vector3.Angle(transform.forward, playerDirection);
         Vector3 direction = playerDirection.normalized;
 
-        float searchAngle = 100;
+        float distance = Vector3.Distance(transform.position, Target.transform.position);
 
-        if (angle < searchAngle)
+
+        if (angle < searchAngle && distance < moveRange)
         {
             if (Physics.Raycast(rayPos.transform.position, direction, out hit))
             {
@@ -125,6 +128,11 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
+        else if(distance > moveRange)
+        {
+            return false;
+        }
+
         return false;
     }
 

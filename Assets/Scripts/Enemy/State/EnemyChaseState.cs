@@ -33,6 +33,11 @@ public class EnemyChaseState : EnemyStateBase
             }
         }
 
+        if (enemy.IsFound() == false)
+        {
+            return new EnemyWaitState();
+        }
+
         return this;
     }
 }
